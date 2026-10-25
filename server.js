@@ -45,14 +45,27 @@ function ensureDataFiles() {
     fs.writeFileSync(HISTORY_FILE, JSON.stringify({ entries: [] }, null, 2));
   }
 
-  // 2. Users (Seed default Admin account: admin / admin123)
-  if (!fs.existsSync(USERS_FILE)) {
-    const adminPass = hashPassword('admin123');
-    const defaultAdmin = {
+  // 2. Users (Seed or sync Admin account with environment variables)
+  const envAdminUser = (process.env.ADMIN_USERNAME || 'admin').trim();
+  const envAdminPass = (process.env.ADMIN_PASSWORD || 'admin123').trim();
+
+  let usersData = { users: [] };
+  if (fs.existsSync(USERS_FILE)) {
+    try {
+      usersData = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+    } catch (_) {
+      usersData = { users: [] };
+    }
+  }
+
+  let adminUser = (usersData.users || []).find(u => u.role === 'admin' || u.id === 'usr_admin_001');
+  if (!adminUser) {
+    const adminPass = hashPassword(envAdminPass);
+    adminUser = {
       id: 'usr_admin_001',
       fullName: 'Aayushmaan Anand (Admin)',
-      username: 'admin',
-      email: 'admin@recomind.ai',
+      username: envAdminUser,
+      email: `${envAdminUser}@recomind.ai`,
       salt: adminPass.salt,
       hash: adminPass.hash,
       avatar: '🛡️',
@@ -60,7 +73,15 @@ function ensureDataFiles() {
       provider: 'local',
       createdAt: new Date().toISOString()
     };
-    fs.writeFileSync(USERS_FILE, JSON.stringify({ users: [defaultAdmin] }, null, 2));
+    usersData.users.unshift(adminUser);
+    fs.writeFileSync(USERS_FILE, JSON.stringify(usersData, null, 2));
+  } else if (process.env.ADMIN_USERNAME || process.env.ADMIN_PASSWORD) {
+    // If custom env vars are provided in Render/.env, auto-sync credentials
+    const adminPass = hashPassword(envAdminPass);
+    adminUser.username = envAdminUser;
+    adminUser.salt = adminPass.salt;
+    adminUser.hash = adminPass.hash;
+    fs.writeFileSync(USERS_FILE, JSON.stringify(usersData, null, 2));
   }
 
   // 3. Community Reviews (Seed initial reviews for demo)
