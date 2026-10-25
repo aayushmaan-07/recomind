@@ -1,0 +1,25 @@
+{
+  "name": "recomind",
+  "version": "1.0.0",
+  "description": "RecoMind: AI-Based Personalized Recommendation System for Movies, Music, and Books",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "ai",
+    "recommendation-system",
+    "gemini",
+    "express",
+    "fullstack"
+  ],
+  "author": "Quantum University",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^2.30.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

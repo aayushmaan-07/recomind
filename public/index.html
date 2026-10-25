@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RecoMind — Vision Edition AI Recommendation Engine</title>
+  <meta name="description" content="AI-Powered Personalized Recommendations for Movies, Music, and Books with Official Posters and Inline Cinema Player.">
+  
+  <!-- Premium Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- html2canvas for High-Res Aesthetic Bento Card Export (Feature 3) -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body class="vision-body">
+
+  <!-- Ambient Ethereal Glow Backdrops (Blue on Left, Violet on Right) -->
+  <div class="vision-ambient-world">
+    <div class="ambient-orb orb-left" id="ambientLeft"></div>
+    <div class="ambient-orb orb-right" id="ambientRight"></div>
+    <div class="ambient-grid-grain"></div>
+  </div>
+
+  <div class="vision-container">
+    
+    <!-- Floating Vision Glass Header -->
+    <header class="vision-header">
+      <div class="header-brand">
+        <div class="brand-sparkle-box">
+          <span class="sparkle-glyph">✨</span>
+        </div>
+        <div class="brand-text-column">
+          <div class="brand-name-row">
+            <h1>RecoMind</h1>
+            <span class="vision-capsule-badge">VISION</span>
+          </div>
+          <span class="brand-subtitle">AI Recommendation Engine</span>
+        </div>
+      </div>
+
+      <div class="header-status-actions">
+        <div class="status-pill-badge" title="Gemini AI Connected">
+          <span class="status-indicator-dot"></span>
+          <span class="status-text">AI Connected</span>
+        </div>
+
+        <!-- ❤️ Watchlist / Saved Button -->
+        <button type="button" id="watchlistBtn" class="history-pill-btn watchlist-nav-btn" title="View your saved items">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" class="heart-nav-icon">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span>Saved</span>
+          <span id="watchlistBadge" class="watchlist-count-badge hidden">0</span>
+        </button>
+        
+        <!-- 🕒 History Button -->
+        <button type="button" id="historyBtn" class="history-pill-btn" title="View past recommendations">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>History</span>
+          <span id="historyBadge" class="history-count-pill hidden">0</span>
+        </button>
+
+        <!-- 🛡️ Admin Panel Nav Button (Shown only for role: 'admin') -->
+        <button type="button" id="adminNavBtn" class="history-pill-btn admin-nav-pill hidden" title="Admin Command Center">
+          <span class="admin-shield-icon">🛡️</span>
+          <span>Admin</span>
+        </button>
+
+        <!-- 👤 User Profile / Sign In Capsule Button with Dropdown -->
+        <div class="user-auth-capsule-wrap">
+          <button type="button" id="authNavBtn" class="history-pill-btn user-auth-btn" title="Account / Sign In">
+            <span id="authBtnAvatar" class="auth-avatar-pill">⚡</span>
+            <span id="authBtnName">Sign In</span>
+          </button>
+
+          <!-- Floating Liquid Glass Profile Dropdown -->
+          <div id="profileDropdown" class="profile-glass-menu hidden">
+            <div class="menu-user-row">
+              <span id="menuAvatar" class="menu-avatar-circle">⚡</span>
+              <div class="menu-user-details">
+                <span id="menuFullName" class="menu-full-name">Guest User</span>
+                <span id="menuHandle" class="menu-user-handle">@guest</span>
+              </div>
+            </div>
+            <div class="menu-badges-row">
+              <span id="menuRoleBadge" class="badge-role-pill">User</span>
+              <span id="menuProviderBadge" class="badge-provider-pill">Local</span>
+            </div>
+            <div class="menu-divider-line"></div>
+            <button type="button" id="menuAdminBtn" class="menu-action-item admin-highlight hidden">
+              <span>🛡️</span>
+              <span>Admin Dashboard</span>
+            </button>
+            <button type="button" id="logoutBtn" class="menu-action-item logout-highlight">
+              <span>🚪</span>
+              <span>Log Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="vision-hero">
+      <div class="hero-capsule-badge">
+        <span class="capsule-star">✦</span>
+        <span>Liquid Intelligence Experience</span>
+      </div>
+      <h2 class="hero-title">
+        Discover what moves you.<br>
+        <span class="hero-gradient-text">Curated by your mood.</span>
+      </h2>
+      <p class="hero-subtext">
+        Tell RecoMind how you feel, what you crave, or what you've loved. Our AI crafts an exclusive 6-item Liquid Glass Bento shortlist with real posters and inline cinema previews.
+      </p>
+    </section>
+
+    <!-- Main Glass Studio Card with Voice Mic & Glider -->
+    <main class="vision-studio-card">
+      <div class="card-glow-specular"></div>
+      
+      <form id="recommendForm" novalidate>
+        
+        <!-- Step 01: Choose Medium with Butter-Smooth Slider -->
+        <div class="studio-block">
+          <div class="block-label-row">
+            <span class="step-badge">01</span>
+            <label class="block-title">Choose Medium</label>
+          </div>
+
+          <!-- Butter-Smooth Sliding Controller Track -->
+          <div class="segmented-slider-track" id="categorySliderTrack" role="tablist">
+            <!-- Physical Glider Pill with Spring Physics -->
+            <div class="sliding-glider-pill" id="sliderPill"></div>
+
+            <button type="button" class="segment-tab active" data-category="Movies" role="tab" aria-selected="true">
+              <span class="tab-icon">🎬</span>
+              <span class="tab-label">Movies</span>
+            </button>
+            <button type="button" class="segment-tab" data-category="Music" role="tab" aria-selected="false">
+              <span class="tab-icon">🎵</span>
+              <span class="tab-label">Music</span>
+            </button>
+            <button type="button" class="segment-tab" data-category="Books" role="tab" aria-selected="false">
+              <span class="tab-icon">📚</span>
+              <span class="tab-label">Books</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Discovery Mode Switcher: By Mood vs By Specific Title -->
+        <div class="discovery-mode-bar" id="discoveryModeBar">
+          <span class="mode-bar-label">Discovery Mode:</span>
+          <div class="discovery-mode-pills" id="discoveryModePills" role="tablist">
+            <button type="button" class="mode-pill-btn active" data-mode="mood" role="tab" aria-selected="true">
+              <span class="mode-icon">🔮</span>
+              <span>By Mood / Vibe</span>
+            </button>
+            <button type="button" class="mode-pill-btn" data-mode="title" role="tab" aria-selected="false">
+              <span class="mode-icon">🎯</span>
+              <span>By Specific Title ("Similar-To")</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 02: Describe Your Vibe or Enter Specific Title (With 🎙️ Voice Input) -->
+        <div class="studio-block" id="step02Block" style="margin-top: 22px;">
+          <div class="block-label-row">
+            <span class="step-badge">02</span>
+            <label for="moodInput" class="block-title" id="step02Label">
+              Describe Your Vibe or Mood <span class="req-star">*</span>
+            </label>
+            <span class="char-counter" id="moodCounter">0 / 250</span>
+          </div>
+
+          <div class="textarea-inset-box">
+            <textarea
+              id="moodInput"
+              rows="3"
+              maxlength="250"
+              placeholder="e.g. Mind-bending psychological thriller with dark atmospheric rainy vibes and an unexpected plot twist..."
+              required
+            ></textarea>
+            
+            <!-- 🎙️ Floating Voice Input Microphone Button -->
+            <button type="button" id="voiceBtn" class="voice-mic-btn" title="Speak to describe your mood (Voice-to-Text)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="mic-icon">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+              <span class="mic-listening-ping"></span>
+            </button>
+          </div>
+
+          <!-- Quick Suggestions Pill Row -->
+          <div class="suggestions-row">
+            <span class="suggestions-label" id="suggestionsLabel">Quick suggestions:</span>
+            <div class="vibe-chips" id="vibeChips">
+              <!-- Dynamically populated chips -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 03: Optional Loved Examples -->
+        <div class="studio-block" id="step03Block" style="margin-top: 24px;">
+          <div class="block-label-row">
+            <span class="step-badge">03</span>
+            <label for="favoritesInput" class="block-title">
+              Loved Examples <span class="opt-label">(Optional reference)</span>
+            </label>
+          </div>
+
+          <div class="input-inset-box">
+            <div class="input-lens-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="favoritesInput"
+              placeholder="e.g. Interstellar, Shutter Island, Arrival"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <!-- Primary Shimmer Action Button -->
+        <div class="submit-row">
+          <button type="submit" id="submitBtn" class="vision-primary-btn">
+            <span class="btn-shimmer-sweep"></span>
+            <span class="btn-inner">
+              <span class="btn-text" id="submitBtnTxt">Generate 6 Recommendations</span>
+              <span class="btn-sparkle">⚡</span>
+            </span>
+          </button>
+        </div>
+
+      </form>
+    </main>
+
+    <!-- Radar Pulse Wave Loading Chamber -->
+    <div id="loadingState" class="vision-loading-chamber hidden">
+      <div class="radar-pulse-core">
+        <div class="pulse-ring ring-1"></div>
+        <div class="pulse-ring ring-2"></div>
+        <div class="pulse-ring ring-3"></div>
+        <div class="pulse-orb">✨</div>
+      </div>
+      <div class="loading-message-wrapper">
+        <h4 class="loading-heading" id="loadingMessage">Pulling together six picks for you...</h4>
+        <p class="loading-sub">Analyzing moods, nuances, and official artwork with Gemini AI</p>
+      </div>
+    </div>
+
+    <!-- Alert Box -->
+    <div id="errorBox" class="vision-alert hidden">
+      <div class="alert-content-group">
+        <span class="alert-symbol">⚠️</span>
+        <div>
+          <h5 id="errorTitle">Notice</h5>
+          <p id="errorMessage">Unable to generate recommendations right now.</p>
+        </div>
+      </div>
+      <button type="button" class="alert-dismiss-btn" id="closeErrorBtn">&times;</button>
+    </div>
+
+    <!-- Results Section: Liquid Bento Cards with Official Posters & Staggered Entrance -->
+    <section id="resultsSection" class="results-theater hidden">
+      <div class="theater-bar">
+        <div>
+          <div class="theater-beacon-badge">
+            <span class="beacon-dot"></span>
+            <span id="resultsBadge">Curated for you</span>
+          </div>
+          <h3 class="theater-headline" id="resultsHeading">Top 6 Recommendations</h3>
+        </div>
+        
+        <div class="theater-actions-cluster">
+          <!-- 📸 Export Aesthetic Bento Card Button (Feature 3) -->
+          <button type="button" id="exportCardBtn" class="vision-ghost-btn export-card-btn" title="Download High-Res Aesthetic Bento Card (PNG) for slides & social media">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" class="export-icon-svg">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span id="exportBtnTxt">Export Card</span>
+          </button>
+
+          <button type="button" id="newSearchBtn" class="vision-ghost-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            <span>Search Again</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bento Cards Grid with Official Posters & Staggered Cascade Reveal -->
+      <div class="vision-bento-grid" id="cardsGrid">
+        <!-- Cards generated dynamically -->
+      </div>
+
+      <!-- 🎛️ AI VIBE TWEAK REFINEMENT DOCK (Feature 4) -->
+      <div class="vibe-tweak-dock" id="vibeTweakDock">
+        <div class="tweak-dock-header">
+          <div class="tweak-title-row">
+            <span class="tweak-icon-badge">🎛️</span>
+            <div>
+              <h4 class="tweak-heading">Fine-Tune Recommendations</h4>
+              <p class="tweak-sub">1-Click AI Prompt Modifiers — Re-roll your shortlist with new artistic constraints</p>
+            </div>
+          </div>
+          <span class="tweak-hint-pill">Zero Re-typing ⚡</span>
+        </div>
+
+        <div class="tweak-pills-row" id="tweakPillsRow">
+          <button type="button" class="tweak-action-pill" data-tweak="Make it darker, grittier, and more suspenseful with high psychological tension">
+            <span class="tweak-emoji">⚡</span>
+            <span>Darker & Grittier</span>
+          </button>
+          <button type="button" class="tweak-action-pill" data-tweak="Focus exclusively on vintage 80s and 90s classic masterpieces with nostalgic soul">
+            <span class="tweak-emoji">🕰️</span>
+            <span>80s / 90s Vintage Classics</span>
+          </button>
+          <button type="button" class="tweak-action-pill" data-tweak="High adrenaline, energetic, fast-paced, and intensely gripping">
+            <span class="tweak-emoji">🚀</span>
+            <span>High-Adrenaline & Fast</span>
+          </button>
+          <button type="button" class="tweak-action-pill" data-tweak="Deeply cerebral, philosophical, existential, and mind-bending with major plot twists">
+            <span class="tweak-emoji">🧠</span>
+            <span>Mind-Bending & Deep</span>
+          </button>
+          <button type="button" class="tweak-action-pill" data-tweak="Warm, wholesome, emotionally uplifting, and comforting cozy vibes">
+            <span class="tweak-emoji">☕</span>
+            <span>Cozy & Uplifting</span>
+          </button>
+          <button type="button" class="tweak-action-pill" data-tweak="Hidden underground indie gems, critically acclaimed cult favorites, strictly non-mainstream">
+            <span class="tweak-emoji">💎</span>
+            <span>Underrated Indie Gems</span>
+          </button>
+        </div>
+
+        <!-- ✍️ Custom Free-form Tweak Input Bar -->
+        <div class="custom-tweak-box">
+          <div class="custom-tweak-label-row">
+            <span class="custom-tweak-prompt-label">✍️ Ya Apne Words Mein Batayein Kya Badle:</span>
+            <span class="custom-tweak-hint">Hinglish, Hindi ya English mein custom instruction likhein</span>
+          </div>
+          <div class="custom-tweak-input-wrapper">
+            <div class="custom-tweak-input-lens">⚡</div>
+            <input
+              type="text"
+              id="customTweakInput"
+              class="custom-tweak-input"
+              placeholder="e.g. Thoda comedy aur light-hearted banao / Christopher Nolan jaisi chahiye / 90s rock only..."
+              maxlength="200"
+            />
+            <button type="button" id="applyCustomTweakBtn" class="custom-tweak-submit-btn">
+              <span>Refine Shortlist</span>
+              <span class="btn-sparkle">🚀</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Off-Screen Aesthetic Bento Export Card Template (Feature 3) -->
+    <div id="exportCardContainer" class="export-offscreen-wrapper">
+      <div id="bentoExportCard" class="bento-export-showcase">
+        <div class="export-glow-ambient orb-1"></div>
+        <div class="export-glow-ambient orb-2"></div>
+        <div class="export-card-header">
+          <div class="export-brand-stack">
+            <div class="export-logo-badge">✨ RecoMind</div>
+            <span class="export-vision-pill">VISION EDITION</span>
+          </div>
+          <div class="export-watermark-stack">
+            <span class="export-uni-txt">Quantum University • B.Tech CSE Capstone Project</span>
+            <span id="exportDateTxt" class="export-date-txt">Date</span>
+          </div>
+        </div>
+
+        <div class="export-mood-banner">
+          <span class="export-mood-label">CURATED MOOD:</span>
+          <p id="exportMoodTxt" class="export-mood-body">"Mind-bending psychological thriller"</p>
+        </div>
+
+        <div id="exportItemsGrid" class="export-items-grid">
+          <!-- 6 items injected dynamically for export -->
+        </div>
+
+        <div class="export-footer-bar">
+          <div class="export-footer-left">
+            <span>Powered by Google Gemini AI & Lakebase Architecture</span>
+          </div>
+          <div class="export-team-tags">
+            <span>Aayushmaan</span> • <span>Arunabh</span> • <span>Ankush</span> • <span>Prabal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🎬 INLINE YOUTUBE TRAILER & CINEMA PLAYER MODAL -->
+    <div id="trailerModal" class="vision-modal-layer hidden">
+      <div class="modal-backdrop-blur" id="trailerBackdrop"></div>
+      <div class="cinema-theater-dialog">
+        <!-- Video Top Bar -->
+        <div class="theater-dialog-top">
+          <div class="theater-title-line">
+            <span class="theater-icon-pill">▶ CINEMA PREVIEW</span>
+            <h4 id="trailerModalTitle" class="trailer-title-txt">Loading trailer...</h4>
+          </div>
+          <button type="button" class="modal-close-btn" id="closeTrailerBtn">&times;</button>
+        </div>
+
+        <!-- 16:9 Video Frame -->
+        <div class="theater-video-wrapper">
+          <div id="trailerLoadingOverlay" class="theater-video-loader">
+            <div class="video-loader-spinner"></div>
+            <p id="trailerLoadStatus">Loading cinema player...</p>
+          </div>
+          <iframe
+            id="trailerIframe"
+            src=""
+            title="RecoMind Trailer Player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <!-- Video Bottom Details -->
+        <div class="theater-dialog-bottom">
+          <div class="theater-meta-row">
+            <span id="trailerMetaCreator" class="trailer-creator-txt">Director / Artist</span>
+            <span>&bull;</span>
+            <span id="trailerMetaYear" class="trailer-year-txt">Year</span>
+            <span id="trailerMetaTag" class="theater-tag-pill">Vibe</span>
+          </div>
+          <p id="trailerMetaWhy" class="trailer-why-txt">Description</p>
+          <div class="theater-fallback-row">
+            <a id="trailerExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="theater-direct-link">
+              <span>Open directly on YouTube / Spotify</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ❤️ Watchlist / Saved Collection Slide-Over Modal -->
+    <div id="watchlistModal" class="vision-modal-layer hidden">
+      <div class="modal-backdrop-blur" id="watchlistBackdrop"></div>
+      <div class="vision-modal-dialog">
+        <div class="modal-header-bar">
+          <div class="modal-title-stack">
+            <div class="modal-heart-icon">❤️</div>
+            <div>
+              <h4>My Saved Collection</h4>
+              <p class="modal-sub">Personal Watchlist stored across sessions</p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="closeWatchlistBtn">&times;</button>
+        </div>
+
+        <!-- Filter Tabs: All, Movies, Music, Books -->
+        <div class="watchlist-filters-bar">
+          <button type="button" class="watchlist-filter-pill active" data-filter="All">All</button>
+          <button type="button" class="watchlist-filter-pill" data-filter="Movies">🎬 Movies</button>
+          <button type="button" class="watchlist-filter-pill" data-filter="Music">🎵 Music</button>
+          <button type="button" class="watchlist-filter-pill" data-filter="Books">📚 Books</button>
+        </div>
+
+        <div class="modal-items-scroll" id="watchlistBody">
+          <!-- Dynamically populated saved items -->
+        </div>
+
+        <div class="modal-footer-bar">
+          <button type="button" id="clearWatchlistBtn" class="btn-clear-archive">Clear Saved</button>
+          <button type="button" id="doneWatchlistBtn" class="btn-done-archive">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🕒 Vision History Slide-Over Modal -->
+    <div id="historyModal" class="vision-modal-layer hidden">
+      <div class="modal-backdrop-blur" id="modalBackdrop"></div>
+      <div class="vision-modal-dialog">
+        <div class="modal-header-bar">
+          <div class="modal-title-stack">
+            <div class="modal-sparkle-icon">📜</div>
+            <div>
+              <h4>Past Curations</h4>
+              <p class="modal-sub">Stored locally in your RecoMind session database</p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="closeHistoryBtn">&times;</button>
+        </div>
+
+        <div class="modal-items-scroll" id="historyBody">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div class="modal-footer-bar">
+          <button type="button" id="clearHistoryBtn" class="btn-clear-archive">Clear History</button>
+          <button type="button" id="doneHistoryBtn" class="btn-done-archive">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔐 USER AUTHENTICATION MODAL (Register / Sign In / Google OAuth) -->
+    <div id="authModal" class="vision-modal-layer hidden">
+      <div class="modal-backdrop-blur" id="authBackdrop"></div>
+      <div class="auth-glass-dialog">
+        <div class="auth-dialog-top">
+          <div class="auth-brand-badge">
+            <span class="auth-brand-star">✨</span>
+            <span id="authModalTitle">Welcome to RecoMind</span>
+          </div>
+          <button type="button" class="modal-close-btn" id="closeAuthBtn">&times;</button>
+        </div>
+
+        <div class="auth-dialog-body">
+          <!-- 1-Click Google Sign-In Button -->
+          <button type="button" id="googleAuthBtn" class="google-auth-btn">
+            <svg class="google-svg" viewBox="0 0 24 24" width="18" height="18">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+
+          <div class="auth-divider-line">
+            <span>OR WITH USERNAME</span>
+          </div>
+
+          <!-- Auth Mode Tabs (Sign In / Register) -->
+          <div class="auth-tabs-track">
+            <button type="button" class="auth-tab-btn active" id="tabSignIn">Sign In</button>
+            <button type="button" class="auth-tab-btn" id="tabRegister">Create Account</button>
+          </div>
+
+          <!-- Alert message box inside modal -->
+          <div id="authAlert" class="auth-alert-box hidden"></div>
+
+          <form id="authForm" novalidate>
+            <!-- Full Name (Only in Register mode) -->
+            <div class="auth-input-group hidden" id="fullNameGroup">
+              <label for="authFullName" class="auth-label">Full Name</label>
+              <div class="auth-input-wrap">
+                <input type="text" id="authFullName" placeholder="e.g. Aayushmaan Anand" autocomplete="name" />
+              </div>
+            </div>
+
+            <!-- Avatar Selector (Only in Register mode) -->
+            <div class="auth-input-group hidden" id="avatarPickerGroup">
+              <label class="auth-label">Select Profile Persona</label>
+              <div class="avatar-options-grid" id="avatarOptions">
+                <button type="button" class="avatar-pick-pill active" data-avatar="⚡">⚡ Innovator</button>
+                <button type="button" class="avatar-pick-pill" data-avatar="🎬">🎬 Cinephile</button>
+                <button type="button" class="avatar-pick-pill" data-avatar="🎧">🎧 Audiophile</button>
+                <button type="button" class="avatar-pick-pill" data-avatar="📚">📚 Scholar</button>
+                <button type="button" class="avatar-pick-pill" data-avatar="🚀">🚀 Sci-Fi Fan</button>
+                <button type="button" class="avatar-pick-pill" data-avatar="☕">☕ Cozy Reader</button>
+              </div>
+            </div>
+
+            <!-- Username / Handle -->
+            <div class="auth-input-group">
+              <label for="authUsername" class="auth-label">Username / User ID</label>
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon">@</span>
+                <input type="text" id="authUsername" placeholder="e.g. aayushmaan01" autocomplete="username" required />
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="auth-input-group">
+              <label for="authPassword" class="auth-label">Password</label>
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon">🔒</span>
+                <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password" required />
+                <button type="button" id="togglePasswordBtn" class="auth-eye-btn" title="Toggle password visibility">👁️</button>
+              </div>
+            </div>
+
+            <button type="submit" id="authSubmitBtn" class="auth-submit-btn">
+              <span id="authSubmitTxt">Log In</span>
+              <span>⚡</span>
+            </button>
+          </form>
+
+          <div class="auth-demo-hint">
+            <span>🛡️ College Demo Admin:</span>
+            <code>admin</code> / <code>admin123</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⭐ COMMUNITY REVIEWS & RATINGS MODAL -->
+    <div id="reviewsModal" class="vision-modal-layer hidden">
+      <div class="modal-backdrop-blur" id="reviewsBackdrop"></div>
+      <div class="reviews-glass-dialog">
+        <!-- Dialog Header -->
+        <div class="reviews-header-bar">
+          <div class="reviews-header-title-box">
+            <span class="reviews-header-badge">⭐ COMMUNITY REVIEWS</span>
+            <h4 id="reviewModalItemTitle" class="reviews-main-title">Item Title</h4>
+          </div>
+          <button type="button" class="modal-close-btn" id="closeReviewsBtn">&times;</button>
+        </div>
+
+        <!-- Item Overview Summary Bar -->
+        <div class="reviews-summary-bar">
+          <div class="review-item-mini-card">
+            <img id="reviewItemPoster" class="review-item-poster-img" src="" alt="Cover" />
+            <div class="review-item-text">
+              <span id="reviewItemCategory" class="review-cat-pill">Category</span>
+              <span id="reviewItemCreator" class="review-creator-txt">Creator</span>
+            </div>
+          </div>
+          <div class="review-rating-score-box">
+            <div class="review-big-star-row">
+              <span class="review-big-star">★</span>
+              <span id="reviewAverageScore" class="review-score-number">5.0</span>
+              <span class="review-score-max">/ 5.0</span>
+            </div>
+            <span id="reviewCountTxt" class="review-count-sub">0 Community Reviews</span>
+          </div>
+        </div>
+
+        <!-- Community Reviews Scroll Area -->
+        <div class="reviews-scroll-chamber" id="reviewsScrollChamber">
+          <div id="communityReviewsList" class="community-reviews-list">
+            <!-- Dynamically populated reviews -->
+          </div>
+        </div>
+
+        <!-- Write a Review Section -->
+        <div class="write-review-container">
+          <div class="write-review-top">
+            <span class="write-review-heading">Leave Your Rating & Review</span>
+            <span id="writeReviewUserBadge" class="write-user-pill">Posting as: Guest</span>
+          </div>
+
+          <!-- Unauthenticated banner -->
+          <div id="reviewAuthPrompt" class="review-auth-prompt hidden">
+            <span>Sign in to leave a verified review & rating</span>
+            <button type="button" id="promptLoginBtn" class="review-signin-btn">Sign In ⚡</button>
+          </div>
+
+          <!-- Authenticated Form -->
+          <form id="writeReviewForm" class="write-review-form">
+            <div class="review-form-controls-row">
+              <!-- 5-Star Interactive Rating Picker -->
+              <div class="star-picker-group">
+                <span class="star-picker-label">Rating:</span>
+                <div class="star-rating-picker" id="starPicker">
+                  <button type="button" class="star-btn active" data-value="1">★</button>
+                  <button type="button" class="star-btn active" data-value="2">★</button>
+                  <button type="button" class="star-btn active" data-value="3">★</button>
+                  <button type="button" class="star-btn active" data-value="4">★</button>
+                  <button type="button" class="star-btn active" data-value="5">★</button>
+                </div>
+                <span id="selectedRatingText" class="selected-star-txt">5 / 5 Stars</span>
+              </div>
+
+              <!-- Mood Match Accuracy Selector -->
+              <div class="mood-match-picker-group">
+                <span class="star-picker-label">Mood Match:</span>
+                <select id="reviewMoodMatch" class="mood-match-select">
+                  <option value="100% Spot on" selected>🎯 100% Spot on</option>
+                  <option value="Pretty Close">✨ Pretty Close</option>
+                  <option value="Decent Alternative">🤷 Decent Alternative</option>
+                  <option value="Off Vibe">❌ Off Vibe</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="review-textarea-box">
+              <textarea
+                id="reviewCommentInput"
+                rows="2"
+                maxlength="350"
+                placeholder="Write your review... What did you love about the plot, soundtrack, acting, or prose?"
+                required
+              ></textarea>
+            </div>
+
+            <div class="review-submit-bar">
+              <span id="reviewCharCounter" class="char-counter">0 / 350</span>
+              <button type="submit" id="submitReviewBtn" class="post-review-btn">
+                <span>Post Review</span>
+                <span>✦</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🛡️ ADMIN COMMAND CENTER MODAL (Full Role-Based Access Control) -->
+    <div id="adminModal" class="vision-modal-layer hidden">
+      <div class="modal-backdrop-blur" id="adminBackdrop"></div>
+      <div class="admin-glass-dialog">
+        <!-- Admin Header -->
+        <div class="admin-header-bar">
+          <div class="admin-title-stack">
+            <div class="admin-shield-emblem">🛡️</div>
+            <div>
+              <div class="admin-headline-row">
+                <h4>RecoMind Admin Command Center</h4>
+                <span class="admin-badge-gold">ROLE: ADMIN</span>
+              </div>
+              <p class="admin-sub">Role-Based Access Control • Active Users & Content Moderation</p>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="closeAdminBtn">&times;</button>
+        </div>
+
+        <!-- Live Metrics Cards -->
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <span class="admin-stat-icon">👥</span>
+            <div>
+              <div class="admin-stat-number" id="statUsers">1</div>
+              <div class="admin-stat-label">Registered Users</div>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-icon">⭐</span>
+            <div>
+              <div class="admin-stat-number" id="statReviews">0</div>
+              <div class="admin-stat-label">Community Reviews</div>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-icon">⚡</span>
+            <div>
+              <div class="admin-stat-number" id="statSessions">0</div>
+              <div class="admin-stat-label">AI Curations</div>
+            </div>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-icon">🟢</span>
+            <div>
+              <div class="admin-stat-number" style="font-size:14px; font-weight:700; color:#34d399;" id="statAiStatus">Active</div>
+              <div class="admin-stat-label">Gemini AI Service</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Navigation Tabs -->
+        <div class="admin-nav-tabs-bar">
+          <button type="button" class="admin-tab-btn active" id="adminTabUsers">
+            <span>👥</span>
+            <span>Users Management</span>
+            <span id="adminUserCountPill" class="admin-tab-count">1</span>
+          </button>
+          <button type="button" class="admin-tab-btn" id="adminTabReviews">
+            <span>⭐</span>
+            <span>Content Moderation</span>
+            <span id="adminReviewCountPill" class="admin-tab-count">0</span>
+          </button>
+        </div>
+
+        <!-- Tab 1: Users Management Chamber -->
+        <div class="admin-tab-chamber" id="adminUsersChamber">
+          <div class="admin-table-wrapper">
+            <table class="admin-glass-table">
+              <thead>
+                <tr>
+                  <th>User Profile</th>
+                  <th>Username</th>
+                  <th>Auth Provider</th>
+                  <th>Role</th>
+                  <th>Joined Date</th>
+                  <th style="text-align:right;">Control Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTableBody">
+                <!-- Dynamically populated users -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 2: Reviews Moderation Chamber -->
+        <div class="admin-tab-chamber hidden" id="adminReviewsChamber">
+          <div class="admin-table-wrapper">
+            <table class="admin-glass-table">
+              <thead>
+                <tr>
+                  <th>Item Title</th>
+                  <th>Author</th>
+                  <th>Rating</th>
+                  <th>Review Comment</th>
+                  <th>Date</th>
+                  <th style="text-align:right;">Moderation</th>
+                </tr>
+              </thead>
+              <tbody id="adminReviewsTableBody">
+                <!-- Dynamically populated reviews -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-footer-bar">
+          <span class="admin-footer-security-note">🔒 Changes sync directly with server database <code>data/users.json</code> and <code>data/reviews.json</code>.</span>
+          <button type="button" id="doneAdminBtn" class="btn-done-archive">Close Panel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Popup -->
+    <div id="copyToast" class="vision-toast hidden">
+      <span class="toast-check-icon">✓</span>
+      <span id="toastMsg">Copied to clipboard!</span>
+    </div>
+
+    <!-- Minimalist Footer -->
+    <footer class="vision-footer">
+      <div class="footer-divider-rule"></div>
+      <div class="footer-meta-row">
+        <span class="footer-brand-title">RecoMind</span>
+        <span class="footer-dot">&bull;</span>
+        <span>B.Tech CSE Capstone Project</span>
+        <span class="footer-dot">&bull;</span>
+        <span>Quantum University, Roorkee</span>
+      </div>
+      <div class="footer-team-names">
+        <span>Aayushmaan Anand</span> &bull; 
+        <span>Arunabh Aditya</span> &bull; 
+        <span>Ankush</span> &bull; 
+        <span>Prabal Singh</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

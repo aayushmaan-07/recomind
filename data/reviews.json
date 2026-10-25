@@ -1,0 +1,72 @@
+{
+  "reviews": [
+    {
+      "id": "rev_1792952279931_m2659",
+      "itemTitle": "Dangal",
+      "category": "Music",
+      "rating": 4,
+      "moodMatch": "100% Spot on",
+      "comment": "good movie",
+      "userId": "usr_admin_001",
+      "userName": "Aayushmaan Anand (Admin)",
+      "userHandle": "admin",
+      "userAvatar": "🛡️",
+      "userProvider": "local",
+      "createdAt": "2026-10-25T18:17:59.931Z"
+    },
+    {
+      "id": "rev_1792943232037_2tju1",
+      "itemTitle": "Raabta",
+      "category": "Music",
+      "rating": 5,
+      "moodMatch": "100% Spot on",
+      "comment": "best song",
+      "userId": "usr_g_g_lro9i8dk",
+      "userName": "Aayushmaan.anand",
+      "userHandle": "aayushmaan_anand",
+      "userAvatar": "⚡",
+      "userProvider": "google",
+      "createdAt": "2026-10-25T15:47:12.037Z"
+    },
+    {
+      "id": "rev_1792938151108_nqlga",
+      "itemTitle": "Interstellar",
+      "category": "Movies",
+      "rating": 5,
+      "moodMatch": "100% Spot on",
+      "comment": "Absolutely legendary cinema. Time dilation concept is mind bending.",
+      "userId": "usr_1792938151097_21rft",
+      "userName": "Prabal Singh",
+      "userHandle": "prabal_mvnx2zee",
+      "userAvatar": "🚀",
+      "userProvider": "local",
+      "createdAt": "2026-10-25T14:22:31.108Z"
+    },
+    {
+      "id": "rev_demo_01",
+      "itemTitle": "Interstellar",
+      "category": "Movies",
+      "rating": 5,
+      "moodMatch": "100% Spot on",
+      "comment": "The docking scene and Hans Zimmer soundtrack gave me pure chills. Best sci-fi film ever.",
+      "userId": "usr_admin_001",
+      "userName": "Aayushmaan Anand",
+      "userHandle": "admin",
+      "userAvatar": "🛡️",
+      "createdAt": "2026-10-25T08:12:37.970Z"
+    },
+    {
+      "id": "rev_demo_02",
+      "itemTitle": "Channa Mereya",
+      "category": "Music",
+      "rating": 5,
+      "moodMatch": "100% Spot on",
+      "comment": "Pure melancholy and poetic sorrow. Arijit Singh connects directly to the heart.",
+      "userId": "usr_demo_02",
+      "userName": "Arunabh Aditya",
+      "userHandle": "arunabh",
+      "userAvatar": "🎵",
+      "createdAt": "2026-10-25T11:12:37.970Z"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "users": [
+    {
+      "id": "usr_admin_001",
+      "fullName": "Aayushmaan Anand (Admin)",
+      "username": "admin",
+      "email": "admin@recomind.ai",
+      "salt": "024c7820e8f35abd8d781cb67c918e01",
+      "hash": "53e744ae26d5736fb07eb673653395b5afc05891c9d85383b380aa9be6fef6a436fd87fe2556d6ffb932cfc958a48f4218c4ef3816727a9a73e44c3ef958c30a",
+      "avatar": "🛡️",
+      "role": "admin",
+      "provider": "local",
+      "createdAt": "2026-10-25T14:12:37.969Z"
+    },
+    {
+      "id": "usr_1792938151097_21rft",
+      "fullName": "Prabal Singh",
+      "username": "prabal_mvnx2zee",
+      "email": "prabal_mvnx2zee@recomind.ai",
+      "salt": "06bdd10cd93eb9fe0e56865fe35f6c05",
+      "hash": "70c2a5c0b266ec0879f851b332f8d1a3123e4924b81a58f3a6c4085d90fdd8c114c627f93a5d83f77ddbe06f8436399998064ebcfd3217723a6ba8e6a6d671d5",
+      "avatar": "🚀",
+      "role": "user",
+      "provider": "local",
+      "createdAt": "2026-10-25T14:22:31.097Z"
+    },
+    {
+      "id": "usr_g_gid_test_123",
+      "fullName": "Ankush Sharma",
+      "username": "ankush_quantum",
+      "email": "ankush.quantum@gmail.com",
+      "googleId": "gid_test_123",
+      "avatar": "⚡",
+      "role": "user",
+      "provider": "google",
+      "createdAt": "2026-10-25T14:22:31.102Z"
+    },
+    {
+      "id": "usr_g_g_lro9i8dk",
+      "fullName": "Aayushmaan.anand",
+      "username": "aayushmaan_anand",
+      "email": "aayushmaan.anand@gmail.com",
+      "googleId": "g_lro9i8dk",
+      "avatar": "⚡",
+      "role": "user",
+      "provider": "google",
+      "createdAt": "2026-10-25T15:46:17.763Z"
+    }
+  ]
+}

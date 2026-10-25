@@ -1,0 +1,627 @@
+{
+  "entries": [
+    {
+      "id": "rec_1792953099472_qlfk0s",
+      "category": "Books",
+      "mood": "dhurendhar",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Dhurendhar",
+          "creator": "Unknown / Traditional Folk",
+          "year": "2020",
+          "why": "A captivating exploration of legendary heroism and cultural ethos, celebrating figures of immense strength and wisdom. Its timeless narrative style immerses readers in rich historical and moral landscapes.",
+          "tag": "Historical Epic"
+        },
+        {
+          "title": "Mrityunjaya",
+          "creator": "Shivaji Sawant",
+          "year": "1967",
+          "why": "Like Dhurendhar, this masterpiece delves deep into the psychological and philosophical complexities of legendary figures, offering a profound re-examination of duty, honor, and sacrifice.",
+          "tag": "Mythological Drama"
+        },
+        {
+          "title": "Yugandhar",
+          "creator": "Shivaji Sawant",
+          "year": "2000",
+          "why": "Shares the grand thematic scope and heroic gravitas of Dhurendhar, focusing on the twilight years and inner conflicts of a towering icon.",
+          "tag": "Biographical Fiction"
+        },
+        {
+          "title": "Chhava",
+          "creator": "Shivaji Sawant",
+          "year": "1979",
+          "why": "Matches the intense biographical depth and stirring accounts of valor found in Dhurendhar, chronicling the life of a legendary warrior king with dramatic flair.",
+          "tag": "Historical Biography"
+        },
+        {
+          "title": "Rau",
+          "creator": "N. S. Inamdar",
+          "year": "1972",
+          "why": "Echoes the rich historical immersion and character-driven storytelling of Dhurendhar, bringing a pivotal era of the past to vivid life through powerful prose.",
+          "tag": "Historical Romance"
+        },
+        {
+          "title": "Panipat",
+          "creator": "N. S. Inamdar",
+          "year": "1988",
+          "why": "Connects with Dhurendhar through its meticulous attention to historical warfare, strategic brilliance, and the personal stakes of legendary commanders.",
+          "tag": "Historical War"
+        }
+      ],
+      "createdAt": "2026-10-25T18:31:39.472Z"
+    },
+    {
+      "id": "rec_1792953084932_8my4w0",
+      "category": "Movies",
+      "mood": "dhurendhar",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "dhurendhar",
+          "creator": "Aditya Suhas Jambhale",
+          "year": "2025",
+          "why": "A gripping and intense cinematic exploration of high-stakes espionage and geopolitical drama that keeps audiences on the edge of their seats.",
+          "tag": "Intense Espionage"
+        },
+        {
+          "title": "Article 370",
+          "creator": "Jyoti Deshpande",
+          "year": "2024",
+          "why": "Shares the exact political-thriller DNA and fast-paced narrative urgency found in Dhurendhar, focusing on covert operations and national security.",
+          "tag": "Political Thriller"
+        },
+        {
+          "title": "The Family Man",
+          "creator": "Raj & DK",
+          "year": "2019",
+          "why": "Connects directly through its gritty portrayal of intelligence agents navigating complex geopolitical threats while balancing high-octane action.",
+          "tag": "Gritty Action"
+        },
+        {
+          "title": "Pathaan",
+          "creator": "Siddharth Anand",
+          "year": "2023",
+          "why": "Delivers the same scale of high-budget, adrenaline-fueled spy action and patriotic heroism that defines modern Indian espionage thrillers.",
+          "tag": "Spy Action"
+        },
+        {
+          "title": "Madras Cafe",
+          "creator": "Shoojit Sircar",
+          "year": "2013",
+          "why": "Matches the realistic, grounded, and tension-filled storytelling of covert missions and political intrigue seen in Dhurendhar.",
+          "tag": "Grounded Warfare"
+        },
+        {
+          "title": "Baby",
+          "creator": "Neeraj Pandey",
+          "year": "2015",
+          "why": "Mirrors the relentless pursuit of cross-border terrorists and the meticulous planning of secret service operations central to Dhurendhar.",
+          "tag": "Tactical Thriller"
+        }
+      ],
+      "createdAt": "2026-10-25T18:31:24.932Z"
+    },
+    {
+      "id": "rec_1792953037147_2u1uo5",
+      "category": "Books",
+      "mood": "dhurendhar",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Dhurendhar",
+          "creator": "Yugandhar",
+          "year": "2021",
+          "why": "A gripping literary work that explores the depths of ambition, strategy, and human resilience in the face of insurmountable odds. Its profound philosophical underpinnings and intricate character studies make it a standout masterpiece.",
+          "tag": "Strategic Drama"
+        },
+        {
+          "title": "Mrityunjaya",
+          "creator": "Shivaji Sawant",
+          "year": "1967",
+          "why": "Shares the same intense psychological depth and character-driven narrative style as Dhurendhar, focusing on the internal conflicts of legendary figures.",
+          "tag": "Mythological Epic"
+        },
+        {
+          "title": "Yugandhar",
+          "creator": "Shivaji Sawant",
+          "year": "2000",
+          "why": "Connects directly with Dhurendhar through its brilliant exploration of political maneuvering, leadership burdens, and profound philosophical dilemmas.",
+          "tag": "Historical Fiction"
+        },
+        {
+          "title": "Chhava",
+          "creator": "Shivaji Sawant",
+          "year": "1979",
+          "why": "Mirrors the fierce intensity and high-stakes biographical drama found in Dhurendhar, keeping readers hooked with its relentless pacing and rich historical context.",
+          "tag": "Biographical Saga"
+        },
+        {
+          "title": "Shriman Yogi",
+          "creator": "Ranjit Desai",
+          "year": "1968",
+          "why": "Offers the same epic scale and meticulous attention to historical detail that fans of Dhurendhar appreciate in deep character-centric storytelling.",
+          "tag": "Historical Masterpiece"
+        },
+        {
+          "title": "Panipat",
+          "creator": "Vishwas Patil",
+          "year": "1988",
+          "why": "Matches the grand narrative ambition and tactical brilliance central to Dhurendhar, portraying historical warfare with immense literary flair.",
+          "tag": "War Fiction"
+        }
+      ],
+      "createdAt": "2026-10-25T18:30:37.147Z"
+    },
+    {
+      "id": "rec_1792952385289_zyuspx",
+      "category": "Music",
+      "mood": "mere nishan",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Mere Nishan",
+          "creator": "Darshan Raval",
+          "year": "2021",
+          "why": "A soul-stirring melody about lingering memories and heartbreak, delivered with Darshan Raval's signature emotional vulnerability and haunting vocals.",
+          "tag": "Melancholic Pop"
+        },
+        {
+          "title": "Bhula Dunga",
+          "creator": "Darshan Raval",
+          "year": "2020",
+          "why": "Shares the exact thematic DNA of heartbreak and separation as 'Mere Nishan', anchored by the same artist's poignant vocal delivery and a deeply emotional acoustic backdrop.",
+          "tag": "Heartbreak Anthem"
+        },
+        {
+          "title": "Jiyein Kyun",
+          "creator": "Papan Dasgupta",
+          "year": "2011",
+          "why": "Captures the same raw, agonizing ache of longing and emotional desolation found in 'Mere Nishan', utilizing soaring vocals to express profound emotional pain.",
+          "tag": "Soulful Agony"
+        },
+        {
+          "title": "Baarishein",
+          "creator": "Anuv Jain",
+          "year": "2018",
+          "why": "Mirrors the intimate, acoustic storytelling style of 'Mere Nishan', evoking deep nostalgia and bittersweet memories of a past love through gentle instrumentation.",
+          "tag": "Acoustic Nostalgia"
+        },
+        {
+          "title": "Kaise Hua",
+          "creator": "Vishal Mishra",
+          "year": "2019",
+          "why": "Resonates with the sentimental depth of 'Mere Nishan', exploring the vulnerable and all-encompassing nature of love and the inevitable marks it leaves behind.",
+          "tag": "Romantic Melancholy"
+        },
+        {
+          "title": "Kho Gaye Hum Kahan",
+          "creator": "Prateek Kuhad",
+          "year": "2016",
+          "why": "Connects to 'Mere Nishan' through its introspective tone and atmospheric soundscape, perfect for quiet moments of reflection on lost connections.",
+          "tag": "Indie Reflection"
+        }
+      ],
+      "createdAt": "2026-10-25T18:19:45.289Z"
+    },
+    {
+      "id": "rec_1792952342384_kwu8ex",
+      "category": "Movies",
+      "mood": "dangal",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Dangal",
+          "creator": "Nitesh Tiwari",
+          "year": "2016",
+          "why": "An inspiring biographical sports drama about a strict father who trains his daughters to become world-class wrestlers against all societal odds. Its sheer emotional depth and gripping wrestling sequences make it a cinematic masterpiece of perseverance.",
+          "tag": "Inspirational Sports Drama"
+        },
+        {
+          "title": "Chak De! India",
+          "creator": "Shimit Amin",
+          "year": "2007",
+          "why": "Like Dangal, this film centers on an underdog sports team—a disgraced former hockey player coaching a fractured women's national team to glory. It shares the same fierce national pride, female empowerment, and triumphant underdog DNA.",
+          "tag": "Triumphant Underdog Spirit"
+        },
+        {
+          "title": "Sultan",
+          "creator": "Ali Abbas Zafar",
+          "year": "2016",
+          "why": "Sharing the same release year and wrestling backdrop as Dangal, this film dives deep into the physical grit and personal redemption of a local wrestling champion. It matches Dangal's high-stakes akhada action and emotional resonance.",
+          "tag": "Grit and Redemption"
+        },
+        {
+          "title": "Bhaag Milkha Bhaag",
+          "creator": "Rakeysh Omprakash Mehra",
+          "year": "2013",
+          "why": "This biographical sports drama mirrors Dangal's intense physical training montages and the sheer pain of athletic ambition driven by a powerful personal backstory. Both films celebrate the blood, sweat, and tears required to conquer the world stage.",
+          "tag": "Relentless Athletic Ambition"
+        },
+        {
+          "title": "Mary Kom",
+          "creator": "Omung Kumar",
+          "year": "2014",
+          "why": "A powerful biographical sports film about a mother who overcomes patriarchal barriers and personal tragedy to become an international boxing champion. It shares Dangal's core theme of fierce daughters breaking glass ceilings in male-dominated combat sports.",
+          "tag": "Fierce Female Empowerment"
+        },
+        {
+          "title": "Taare Zameen Par",
+          "creator": "Aamir Khan",
+          "year": "2007",
+          "why": "Also starring Aamir Khan, this emotionally resonant masterpiece explores the complex dynamics of child upbringing, parental expectations, and unconventional mentorship. It captures the same heart-wrenching emotional vulnerability and triumph found in Dangal.",
+          "tag": "Emotional Family Mentorship"
+        }
+      ],
+      "createdAt": "2026-10-25T18:19:02.384Z"
+    },
+    {
+      "id": "rec_1792952182086_vcgrf5",
+      "category": "Music",
+      "mood": "dangal",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Dangal",
+          "creator": "Pritam",
+          "year": "2016",
+          "why": "A powerhouse soundtrack featuring high-octane motivational anthems like 'Haanikarak Bapu' and the title track 'Dangal' that perfectly capture the sweat, grit, and triumph of wrestling training.",
+          "tag": "Motivational Sports Anthem"
+        },
+        {
+          "title": "Chak De! India",
+          "creator": "Salim-Sulaiman",
+          "year": "2007",
+          "why": "Shares the exact same nationalist pride and underdog triumph DNA as Dangal, driven by energetic percussion and inspiring choral chants.",
+          "tag": "Patriotic Sports Anthem"
+        },
+        {
+          "title": "Bhaag Milkha Bhaag",
+          "creator": "Shankar-Ehsaan-Loy",
+          "year": "2013",
+          "why": "Much like Dangal's training montages, this album uses relentless, driving rhythms and powerful vocals to channel grueling physical endurance into musical brilliance.",
+          "tag": "Intense Workout"
+        },
+        {
+          "title": "Sultan",
+          "creator": "Vishal-Shekhar",
+          "year": "2016",
+          "why": "Another heavy-hitting wrestling-themed soundtrack that mirrors Dangal's rural earthy tones, brass elements, and unstoppable akhada spirit.",
+          "tag": "Wrestling Power"
+        },
+        {
+          "title": "Lakshya",
+          "creator": "Shankar-Ehsaan-Loy",
+          "year": "2004",
+          "why": "Connects directly to Dangal's core theme of transformation and relentless discipline through soaring melodies and anthemic encouragement.",
+          "tag": "Rise To Glory"
+        },
+        {
+          "title": "M.S. Dhoni: The Untold Story",
+          "creator": "Amaal Mallik",
+          "year": "2016",
+          "why": "Captures the same emotional resonance of a middle-class journey to greatness, blending tender familial support with triumphant sports victory.",
+          "tag": "Inspiring Journey"
+        }
+      ],
+      "createdAt": "2026-10-25T18:16:22.086Z"
+    },
+    {
+      "id": "rec_1792952139032_argzwf",
+      "category": "Music",
+      "mood": "oye hoye kya scene hai",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "oye hoye kya scene hai",
+          "creator": "Raftaar & Krsna",
+          "year": "2022",
+          "why": "A high-energy, infectious hip-hop track that combines witty lyricism with an irresistible modern beat, capturing a carefree celebration of life and nightlife.",
+          "tag": "Desi Hip-Hop"
+        },
+        {
+          "title": "Agency",
+          "creator": "Raftaar & Seedhe Maut",
+          "year": "2021",
+          "why": "Shares the same relentless tempo, sharp flows, and swagger-filled production that defines the hard-hitting delivery of oye hoye kya scene hai.",
+          "tag": "Aggressive Rap"
+        },
+        {
+          "title": "Roll Up",
+          "creator": "Badshah & Fotty Seven",
+          "year": "2020",
+          "why": "Channeling the same party-ready, stylish ambiance, this track matches the confident aura and club-friendly vibe of oye hoye kya scene hai.",
+          "tag": "Party Anthem"
+        },
+        {
+          "title": "Naach",
+          "creator": "Muhfaad",
+          "year": "2021",
+          "why": "Delivers an explosive blend of rhythmic cadence and infectious hooks, mirroring the upbeat energy and vibrant mood found in oye hoye kya scene hai.",
+          "tag": "Groovy Beat"
+        },
+        {
+          "title": "Woh",
+          "creator": "Emiway Bantai",
+          "year": "2019",
+          "why": "Captures a similar casual yet bold lyrical storytelling style that connects instantly with the youthful, carefree attitude of oye hoye kya scene hai.",
+          "tag": "Street Rap"
+        },
+        {
+          "title": "Goat",
+          "creator": "Diljit Dosanjh",
+          "year": "2020",
+          "why": "Offers an uplifting, celebratory Punjabi groove that parallels the ultimate feel-good atmosphere and catchy chorus structure of oye hoye kya scene hai.",
+          "tag": "Punjabi Pop"
+        }
+      ],
+      "createdAt": "2026-10-25T18:15:39.032Z"
+    },
+    {
+      "id": "rec_1792952101867_4epczj",
+      "category": "Movies",
+      "mood": "dhurendhar",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Dhurendhar",
+          "creator": "Unknown",
+          "year": "2025",
+          "why": "A captivating cinematic experience that explores deep cultural and dramatic undertones, leaving a lasting impact on its audience.",
+          "tag": "Intense Drama"
+        },
+        {
+          "title": "Gangs of Wasseypur",
+          "creator": "Anurag Kashyap",
+          "year": "2012",
+          "why": "Shares the same gritty, high-stakes narrative style and complex character dynamics found in Dhurendhar.",
+          "tag": "Gritty Crime"
+        },
+        {
+          "title": "Mirzapur",
+          "creator": "Puneet Krishna",
+          "year": "2018",
+          "why": "Mirrored in its raw depiction of power struggles, underworld politics, and relentless pursuit of dominance.",
+          "tag": "Underworld Thriller"
+        },
+        {
+          "title": "Sacred Games",
+          "creator": "Vikramaditya Motwane",
+          "year": "2018",
+          "why": "Delivers the same labyrinthine plotting and morally ambiguous characters that define the core tension of Dhurendhar.",
+          "tag": "Noir Crime"
+        },
+        {
+          "title": "Satya",
+          "creator": "Ram Gopal Varma",
+          "year": "1998",
+          "why": "Acts as a foundational blueprint for intense, realistic underworld dramas that heavily influence the tone of Dhurendhar.",
+          "tag": "Classic Gangster"
+        },
+        {
+          "title": "Paatal Lok",
+          "creator": "Avinash Arun",
+          "year": "2020",
+          "why": "Explores the gritty underbelly of society with uncompromising realism and deep character studies akin to Dhurendhar.",
+          "tag": "Investigative Thriller"
+        }
+      ],
+      "createdAt": "2026-10-25T18:15:01.867Z"
+    },
+    {
+      "id": "rec_1792951985295_t6whlq",
+      "category": "Books",
+      "mood": "Atomic Habits",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Atomic Habits",
+          "creator": "James Clear",
+          "year": "2018",
+          "why": "A groundbreaking practical guide on how tiny changes can lead to remarkable results by reshaping your identity and systems.",
+          "tag": "Self-Improvement"
+        },
+        {
+          "title": "The Power of Habit",
+          "creator": "Charles Duhigg",
+          "year": "2012",
+          "why": "Explores the neurological science behind why habits exist and how they can be transformed, serving as a direct conceptual twin to Atomic Habits.",
+          "tag": "Behavioral Psychology"
+        },
+        {
+          "title": "Tiny Habits",
+          "creator": "BJ Fogg",
+          "year": "2019",
+          "why": "Shares a remarkably similar framework to Atomic Habits, focusing on starting ridiculously small to build lasting behavior change effortlessly.",
+          "tag": "Habit Formation"
+        },
+        {
+          "title": "Deep Work",
+          "creator": "Cal Newport",
+          "year": "2016",
+          "why": "Complements Atomic Habits by offering tactical systems to eliminate distraction and cultivate extreme focus on high-value tasks.",
+          "tag": "Productivity"
+        },
+        {
+          "title": "Think Again",
+          "creator": "Adam Grant",
+          "year": "2021",
+          "why": "Aligns with the growth mindset championed in Atomic Habits by teaching you how to unlearn old mental models and embrace the joy of being wrong.",
+          "tag": "Cognitive Growth"
+        },
+        {
+          "title": "Make It Stick",
+          "creator": "Peter C. Brown",
+          "year": "2014",
+          "why": "Applies rigorous cognitive science to learning and self-improvement, reinforcing the systematic approach to mastery found in Atomic Habits.",
+          "tag": "Cognitive Science"
+        }
+      ],
+      "createdAt": "2026-10-25T18:13:05.296Z"
+    },
+    {
+      "id": "rec_1792951984651_u08zbz",
+      "category": "Music",
+      "mood": "Bohemian Rhapsody",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Bohemian Rhapsody",
+          "creator": "Queen",
+          "year": "1975",
+          "why": "A monumental six-minute suite that defies conventional structure, seamlessly blending opera, hard rock, and balladry into a theatrical masterpiece.",
+          "tag": "Operatic Rock"
+        },
+        {
+          "title": "Stairway to Heaven",
+          "creator": "Led Zeppelin",
+          "year": "1971",
+          "why": "Shares the same epic, multi-movement structural evolution as Bohemian Rhapsody, building slowly from a delicate acoustic ballad into an explosive, soaring rock crescendo.",
+          "tag": "Epic Rock"
+        },
+        {
+          "title": "Bat Out of Hell",
+          "creator": "Meat Loaf",
+          "year": "1977",
+          "why": "Matches the grand, over-the-top theatricality and operatic bombast of Bohemian Rhapsody, driven by Jim Steinman's dramatic songwriting and soaring vocal performances.",
+          "tag": "Theatrical Rock"
+        },
+        {
+          "title": "November Rain",
+          "creator": "Guns N' Roses",
+          "year": "1991",
+          "why": "A sweeping, emotionally charged rock epic that utilizes orchestral arrangements and a dramatic multi-part progression, echoing the grand ambition of Bohemian Rhapsody.",
+          "tag": "Orchestral Ballad"
+        },
+        {
+          "title": "Life on Mars?",
+          "creator": "David Bowie",
+          "year": "1971",
+          "why": "Captures the same whimsical yet profoundly dramatic glam-rock sensibilities, pairing surreal lyrical imagery with a majestic piano-led orchestral swell.",
+          "tag": "Glam Art-Rock"
+        },
+        {
+          "title": "Hey Jude",
+          "creator": "The Beatles",
+          "year": "1968",
+          "why": "Much like Bohemian Rhapsody, this classic builds from an intimate vocal and piano setup into an unforgettable, massive communal singalong chorus that swells in intensity.",
+          "tag": "Anthemic Pop-Rock"
+        }
+      ],
+      "createdAt": "2026-10-25T18:13:04.651Z"
+    },
+    {
+      "id": "rec_1792951592540_9i06kz",
+      "category": "Movies",
+      "mood": "Interstellar",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Interstellar",
+          "creator": "Christopher Nolan",
+          "year": "2014",
+          "why": "A visually breathtaking masterwork that merges hard astrophysics with deeply emotional themes of love and survival across space and time.",
+          "tag": "Cosmic Sci-Fi"
+        },
+        {
+          "title": "Arrival",
+          "creator": "Denis Villeneuve",
+          "year": "2016",
+          "why": "Shares Interstellar's cerebral approach to theoretical physics, time perception, and the profound emotional stakes of humanity's place in the universe.",
+          "tag": "Thought-Provoking"
+        },
+        {
+          "title": "Contact",
+          "creator": "Robert Zemeckis",
+          "year": "1997",
+          "why": "Directly mirrors Interstellar's thematic obsession with reconciling hard science, cosmic exploration, and deep paternal bonds.",
+          "tag": "Existential Sci-Fi"
+        },
+        {
+          "title": "The Martian",
+          "creator": "Ridley Scott",
+          "year": "2015",
+          "why": "Captures the same scientifically grounded struggle for survival against hostile cosmic environments, driven by human ingenuity and problem-solving.",
+          "tag": "Hard Sci-Fi"
+        },
+        {
+          "title": "Inception",
+          "creator": "Christopher Nolan",
+          "year": "2010",
+          "why": "Exhibits the same director's signature fascination with complex temporal mechanics, mind-bending visual effects, and emotional narrative anchors.",
+          "tag": "Mind-Bending"
+        },
+        {
+          "title": "Sunshine",
+          "creator": "Danny Boyle",
+          "year": "2007",
+          "why": "Explores the psychological and existential weight of a high-stakes, visually stunning space mission where the fate of humanity hangs in the balance.",
+          "tag": "Atmospheric Thriller"
+        }
+      ],
+      "createdAt": "2026-10-25T18:06:32.540Z"
+    },
+    {
+      "id": "rec_1792951180257_mmsbit",
+      "category": "Books",
+      "mood": "sad hindi\n[REFINED VIBE / CREATIVE ARTISTIC CONSTRAINT: Warm, wholesome, emotionally uplifting, and comforting cozy vibes]",
+      "favorites": "",
+      "recommendations": [
+        {
+          "title": "The House in the Cerulean Sea",
+          "creator": "TJ Klune",
+          "year": "2020",
+          "why": "This deeply comforting and heartwarming story envelops you in a tender embrace, transforming any lingering sorrow into pure hope and belonging.",
+          "tag": "Cozy and Uplifting"
+        },
+        {
+          "title": "Before the Coffee Gets Cold",
+          "creator": "Toshikazu Kawaguchi",
+          "year": "2015",
+          "why": "A gentle, bittersweet exploration of human connection and second chances that ultimately leaves your heart feeling warm and mended.",
+          "tag": "Gentle Comfort"
+        },
+        {
+          "title": "A Psalm for the Wild-Built",
+          "creator": "Becky Chambers",
+          "year": "2021",
+          "why": "A soothing, philosophical fable about finding peace and contentment in the simple act of existing, perfect for easing a heavy mind.",
+          "tag": "Warm and Peaceful"
+        },
+        {
+          "title": "The Little Prince",
+          "creator": "Antoine de Saint-Exupéry",
+          "year": "1943",
+          "why": "Though touched by gentle melancholy, its profound wisdom and innocent wonder heal the spirit and restore childlike joy to a weary soul.",
+          "tag": "Timeless Wonder"
+        },
+        {
+          "title": "The Travelling Cat Chronicles",
+          "creator": "Hiro Arikawa",
+          "year": "2015",
+          "why": "An ode to friendship and gratitude that moves gracefully from sorrow to a deeply uplifting celebration of love and companionship.",
+          "tag": "Tender and Sweet"
+        },
+        {
+          "title": "Legends & Lattes",
+          "creator": "Travis Baldree",
+          "year": "2022",
+          "why": "The ultimate cozy fantasy about a weary orc starting a coffee shop, offering a safe, low-stakes haven filled with warmth and community.",
+          "tag": "Pure Coziness"
+        }
+      ],
+      "createdAt": "2026-10-25T17:59:40.257Z"
+    }
+  ]
+}
