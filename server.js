@@ -525,18 +525,16 @@ app.post('/api/recommend/swap', async (req, res) => {
   }
 });
 
-// 2. GET /api/history - Retrieve user's personal past recommendation sessions
+// 2. GET /api/history - Retrieve user's personal past recommendation sessions (Account or Device Isolated)
 app.get('/api/history', (req, res) => {
   try {
-    const reqUserId = req.headers['x-user-id'] || req.query.userId || 'guest';
+    const reqUserId = req.headers['x-user-id'] || req.query.userId;
+    if (!reqUserId) {
+      return res.json({ success: true, data: [] });
+    }
     const history = readHistory();
-    // Filter history specifically for the requesting user
-    const userEntries = (history.entries || []).filter(e => {
-      if (reqUserId === 'guest') {
-        return !e.userId || e.userId === 'guest';
-      }
-      return e.userId === reqUserId;
-    });
+    // Filter history strictly for the requesting user account or anonymous device ID
+    const userEntries = (history.entries || []).filter(e => e.userId && e.userId === reqUserId);
     return res.json({ success: true, data: userEntries });
   } catch (err) {
     console.error('Error fetching history:', err);
@@ -547,14 +545,12 @@ app.get('/api/history', (req, res) => {
 // 3. DELETE /api/history - Clear current user's history
 app.delete('/api/history', (req, res) => {
   try {
-    const reqUserId = req.headers['x-user-id'] || req.query.userId || 'guest';
+    const reqUserId = req.headers['x-user-id'] || req.query.userId;
+    if (!reqUserId) {
+      return res.json({ success: true, message: 'No history to clear.' });
+    }
     const history = readHistory();
-    history.entries = (history.entries || []).filter(e => {
-      if (reqUserId === 'guest') {
-        return e.userId && e.userId !== 'guest';
-      }
-      return e.userId !== reqUserId;
-    });
+    history.entries = (history.entries || []).filter(e => e.userId !== reqUserId);
     fs.writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2));
     return res.json({ success: true, message: 'Your history cleared successfully.' });
   } catch (err) {

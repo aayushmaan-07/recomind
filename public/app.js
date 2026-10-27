@@ -174,6 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // User Authentication, Community Reviews & Admin Elements
   // ========================================================
   const AUTH_STORAGE_KEY = 'recomind_auth_user';
+  const DEVICE_ID_KEY = 'recomind_guest_device_id';
+
   let currentUser = null;
   try {
     const rawStored = localStorage.getItem(AUTH_STORAGE_KEY);
@@ -187,6 +189,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } catch (_) {
     localStorage.removeItem(AUTH_STORAGE_KEY);
+  }
+
+  // Returns logged-in account ID OR a unique persistent anonymous Device ID
+  function getActiveUserId() {
+    if (currentUser && currentUser.id) return currentUser.id;
+    try {
+      let devId = localStorage.getItem(DEVICE_ID_KEY);
+      if (!devId) {
+        devId = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 8);
+        localStorage.setItem(DEVICE_ID_KEY, devId);
+      }
+      return devId;
+    } catch (_) {
+      return 'dev_temp_' + Math.random().toString(36).substr(2, 8);
+    }
   }
 
   // Header Nav & Profile Dropdown Elements
@@ -1261,15 +1278,15 @@ document.addEventListener('DOMContentLoaded', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-user-id': currentUser ? currentUser.id : 'guest'
+          'x-user-id': getActiveUserId()
         },
         body: JSON.stringify({
           category: category,
           mood: effectiveMood,
           favorites: favorites,
           mode: currentDiscoveryMode,
-          userId: currentUser ? currentUser.id : 'guest',
-          username: currentUser ? (currentUser.username || currentUser.fullName) : 'guest'
+          userId: getActiveUserId(),
+          username: currentUser ? (currentUser.username || currentUser.fullName) : 'Guest'
         })
       });
 
@@ -2019,7 +2036,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let historyEntries = [];
     try {
       const res = await fetch('/api/history', {
-        headers: { 'x-user-id': currentUser ? currentUser.id : 'guest' }
+        headers: { 'x-user-id': getActiveUserId() }
       });
       if (res.ok) {
         const d = await res.json();
@@ -2254,7 +2271,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function refreshHistoryCount() {
     try {
       const res = await fetch('/api/history', {
-        headers: { 'x-user-id': currentUser ? currentUser.id : 'guest' }
+        headers: { 'x-user-id': getActiveUserId() }
       });
       const data = await res.json();
       const count = (data.data || []).length;
@@ -2272,7 +2289,7 @@ document.addEventListener('DOMContentLoaded', () => {
     historyBody.innerHTML = '<p style="text-align:center; color:#94a3b8; padding:30px 0;">Loading past sessions...</p>';
     try {
       const res = await fetch('/api/history', {
-        headers: { 'x-user-id': currentUser ? currentUser.id : 'guest' }
+        headers: { 'x-user-id': getActiveUserId() }
       });
       const data = await res.json();
       const entries = data.data || [];
@@ -2341,7 +2358,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch('/api/history', {
         method: 'DELETE',
-        headers: { 'x-user-id': currentUser ? currentUser.id : 'guest' }
+        headers: { 'x-user-id': getActiveUserId() }
       });
       if (res.ok) {
         refreshHistoryCount();

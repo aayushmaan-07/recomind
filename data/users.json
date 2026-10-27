@@ -45,6 +45,27 @@
       "role": "user",
       "provider": "google",
       "createdAt": "2026-10-25T15:46:17.763Z"
+    },
+    {
+      "id": "usr_g_116260714783551365748",
+      "fullName": "Aayushmaan Anand",
+      "username": "aayushmaananand07",
+      "email": "aayushmaananand07@gmail.com",
+      "googleId": "116260714783551365748",
+      "avatar": "https://lh3.googleusercontent.com/a/ACg8ocLyNS-EhfLvIP6fcpZtAQzMyUG5kyKo5ROEHMmNwfc3woKxBQ=s96-c",
+      "role": "user",
+      "provider": "google",
+      "createdAt": "2026-10-27T08:53:13.857Z"
+    },
+    {
+      "id": "usr_p_9835590947",
+      "fullName": "User 0947",
+      "username": "user_590947",
+      "phone": "9835590947",
+      "avatar": "📱",
+      "role": "user",
+      "provider": "phone",
+      "createdAt": "2026-10-27T10:03:53.103Z"
     }
   ]
 }

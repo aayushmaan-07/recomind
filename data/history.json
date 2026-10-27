@@ -1,6 +1,110 @@
 {
   "entries": [
     {
+      "id": "rec_1793091252706_0fwesp",
+      "category": "Movies",
+      "mood": "Fight Club",
+      "favorites": "",
+      "mode": "title",
+      "recommendations": [
+        {
+          "title": "Fight Club",
+          "creator": "David Fincher",
+          "year": "1999",
+          "why": "A disillusioned office worker and a charismatic soap maker form an underground fight club that evolves into something much more dangerous. It is a brilliant, subversive satire on modern consumerism and male identity.",
+          "tag": "Psychological Satire"
+        },
+        {
+          "title": "American Psycho",
+          "creator": "Mary Harron",
+          "year": "2000",
+          "why": "Much like Fight Club, this film explores the hollow alienation of yuppie culture and the violent urges hidden beneath a polished exterior. Both share a darkly comedic, unreliable protagonist dealing with identity disintegration.",
+          "tag": "Dark Satire"
+        },
+        {
+          "title": "The Machinist",
+          "creator": "Brad Anderson",
+          "year": "2004",
+          "why": "Shares Fight Club's DNA of severe psychological unreliability, insomnia, and a protagonist whose grip on reality is slipping away. The paranoid, industrial atmosphere mirrors the dark, grimy aesthetic of Fincher's masterpiece.",
+          "tag": "Psychological Thriller"
+        },
+        {
+          "title": "Trainspotting",
+          "creator": "Danny Boyle",
+          "year": "1996",
+          "why": "Captures the exact same anti-establishment, counter-cultural nihilism and kinetic energy found in Fight Club. Both films feature a cynical, first-person narrative voice railing against societal expectations.",
+          "tag": "Cynical Counterculture"
+        },
+        {
+          "title": "Requiem for a Dream",
+          "creator": "Darren Aronofsky",
+          "year": "2000",
+          "why": "Dives deep into obsessive human behavior and self-destruction, echoing Fight Club's exploration of addiction to extreme experiences. Both films use intense, stylized editing to disorient the viewer and mirror psychological decay.",
+          "tag": "Visceral Drama"
+        },
+        {
+          "title": "Nightcrawler",
+          "creator": "Dan Gilroy",
+          "year": "2014",
+          "why": "Features a charismatic, sociopathic outsider who builds a terrifying philosophy of life outside normal societal bounds, much like Tyler Durden. It explores the dark underbelly of ambition and the creation of a distorted personal belief system.",
+          "tag": "Dark Neo-Noir"
+        }
+      ],
+      "createdAt": "2026-10-27T08:54:12.706Z"
+    },
+    {
+      "id": "rec_1793040725043_rvy06e",
+      "category": "Music",
+      "mood": "romantic hindi",
+      "favorites": "",
+      "mode": "mood",
+      "recommendations": [
+        {
+          "title": "Tum Hi Ho",
+          "creator": "Arijit Singh",
+          "year": "2013",
+          "why": "This emotionally charged ballad is the ultimate modern anthem for deep, soul-stirring romance and devotion.",
+          "tag": "Soulful Devotion"
+        },
+        {
+          "title": "Raabta",
+          "creator": "Pritam, Arijit Singh",
+          "year": "2012",
+          "why": "It captures the magical and mysterious feeling of an inexplicable, destined connection between two lovers.",
+          "tag": "Ethereal Romance"
+        },
+        {
+          "title": "Pehla Nasha",
+          "creator": "Udit Narayan, Sadhana Sargam",
+          "year": "1992",
+          "why": "A timeless classic that perfectly encapsulates the innocent, breezy rush of falling in love for the very first time.",
+          "tag": "Nostalgic Bliss"
+        },
+        {
+          "title": "Channa Mereya",
+          "creator": "Arijit Singh",
+          "year": "2016",
+          "why": "Though melancholic, this masterpiece speaks to the profound, aching depth of romantic longing and unrequited love.",
+          "tag": "Melancholic Longing"
+        },
+        {
+          "title": "Tera Ban Jaunga",
+          "creator": "Akhil Sachdeva, Tulsi Kumar",
+          "year": "2019",
+          "why": "A heartwarming, contemporary promise of eternal togetherness wrapped in soothing acoustic melodies.",
+          "tag": "Warm Devotion"
+        },
+        {
+          "title": "Keh Do Na",
+          "creator": "Amaal Mallik, Armaan Malik",
+          "year": "2020",
+          "why": "Its sweet, tender vocal delivery makes it an ideal soundtrack for quiet evenings spent whispering sweet nothings.",
+          "tag": "Tender Intimacy"
+        }
+      ],
+      "createdAt": "2026-10-26T18:52:05.043Z"
+    },
+    {
       "id": "rec_1792953099472_qlfk0s",
       "category": "Books",
       "mood": "dhurendhar",
