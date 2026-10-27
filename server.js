@@ -721,9 +721,17 @@ app.post('/api/auth/google', (req, res) => {
     let user = users.find(u => (u.email && u.email.toLowerCase() === cleanEmail) || (u.googleId && u.googleId === googleId));
 
     if (user) {
-      // Existing user: update avatar if needed
+      // Existing user: update avatar & name if needed
+      let changed = false;
       if (picture && user.avatar !== picture) {
         user.avatar = picture;
+        changed = true;
+      }
+      if (name && user.fullName !== name.trim()) {
+        user.fullName = name.trim();
+        changed = true;
+      }
+      if (changed) {
         saveUsers(users);
       }
     } else {

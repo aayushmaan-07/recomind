@@ -254,6 +254,234 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminUsersTableBody = document.getElementById('adminUsersTableBody');
   const adminReviewsTableBody = document.getElementById('adminReviewsTableBody');
 
+  // ========================================================
+  // 🔗 Feature 3: Shareable Vibe Link Elements
+  // ========================================================
+  const shareVibeBtn = document.getElementById('shareVibeBtn');
+  const shareBtnTxt = document.getElementById('shareBtnTxt');
+  const shareModal = document.getElementById('shareModal');
+  const shareBackdrop = document.getElementById('shareBackdrop');
+  const closeShareBtn = document.getElementById('closeShareBtn');
+  const doneShareBtn = document.getElementById('doneShareBtn');
+  const shareSummaryCat = document.getElementById('shareSummaryCat');
+  const shareSummaryMood = document.getElementById('shareSummaryMood');
+  const shareItemsPreview = document.getElementById('shareItemsPreview');
+  const shareLinkInput = document.getElementById('shareLinkInput');
+  const copyShareLinkBtn = document.getElementById('copyShareLinkBtn');
+  const copyShareBtnTxt = document.getElementById('copyShareBtnTxt');
+  const shareWhatsAppBtn = document.getElementById('shareWhatsAppBtn');
+  const shareTwitterBtn = document.getElementById('shareTwitterBtn');
+  const shareTelegramBtn = document.getElementById('shareTelegramBtn');
+
+  // ========================================================
+  // 🧬 Feature 4: User Taste DNA & Analytics Elements
+  // ========================================================
+  const tasteDnaNavBtn = document.getElementById('tasteDnaNavBtn');
+  const menuTasteDnaBtn = document.getElementById('menuTasteDnaBtn');
+  const tasteDnaModal = document.getElementById('tasteDnaModal');
+  const tasteDnaBackdrop = document.getElementById('tasteDnaBackdrop');
+  const closeTasteDnaBtn = document.getElementById('closeTasteDnaBtn');
+  const doneTasteDnaBtn = document.getElementById('doneTasteDnaBtn');
+  const personaEmoji = document.getElementById('personaEmoji');
+  const personaTitle = document.getElementById('personaTitle');
+  const personaDesc = document.getElementById('personaDesc');
+  const dnaTierBadge = document.getElementById('dnaTierBadge');
+  const segMovies = document.getElementById('segMovies');
+  const segMusic = document.getElementById('segMusic');
+  const segBooks = document.getElementById('segBooks');
+  const pctMovies = document.getElementById('pctMovies');
+  const pctMusic = document.getElementById('pctMusic');
+  const pctBooks = document.getElementById('pctBooks');
+  const dnaTotalCountLabel = document.getElementById('dnaTotalCountLabel');
+  const dnaVibesCloud = document.getElementById('dnaVibesCloud');
+  const dnaMetricCurations = document.getElementById('dnaMetricCurations');
+  const dnaMetricSaved = document.getElementById('dnaMetricSaved');
+  const dnaMetricTopCategory = document.getElementById('dnaMetricTopCategory');
+  const dnaMetricAffinity = document.getElementById('dnaMetricAffinity');
+
+  // ========================================================
+  // 🎧 Feature 1: Singleton Music Audio Preview Controller
+  // ========================================================
+  const audioPreviewCache = new Map();
+  let globalActiveAudio = null;
+  let globalActiveCapsule = null;
+
+  function stopCurrentAudio() {
+    if (globalActiveAudio) {
+      try {
+        globalActiveAudio.pause();
+        globalActiveAudio.currentTime = 0;
+      } catch (_) {}
+      globalActiveAudio = null;
+    }
+    if (globalActiveCapsule) {
+      globalActiveCapsule.classList.remove('playing', 'loading');
+      const icon = globalActiveCapsule.querySelector('.audio-toggle-icon');
+      if (icon) icon.textContent = '▶';
+      const fill = globalActiveCapsule.querySelector('.audio-progress-fill');
+      if (fill) fill.style.width = '0%';
+      const stamp = globalActiveCapsule.querySelector('.audio-time-stamp');
+      if (stamp) stamp.textContent = '0:00 / 0:30';
+      globalActiveCapsule = null;
+    }
+  }
+
+  function formatAudioTime(secs) {
+    const s = Math.floor(secs || 0);
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${m}:${rem < 10 ? '0' : ''}${rem}`;
+  }
+
+  async function fetchAudioPreview(title, creator) {
+    if (!title) return null;
+    const cacheKey = `${title}_${creator || ''}`.toLowerCase();
+    if (audioPreviewCache.has(cacheKey)) {
+      return audioPreviewCache.get(cacheKey);
+    }
+
+    const queries = [
+      `${title} ${creator || ''}`.trim(),
+      title.trim()
+    ];
+
+    for (const q of queries) {
+      try {
+        const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=3`;
+        const res = await fetch(url);
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          const match = data.results.find(r => r.previewUrl);
+          if (match && match.previewUrl) {
+            const result = {
+              previewUrl: match.previewUrl,
+              trackName: match.trackName,
+              artistName: match.artistName,
+              artworkUrl: match.artworkUrl100 ? match.artworkUrl100.replace('100x100bb', '600x600bb') : null
+            };
+            audioPreviewCache.set(cacheKey, result);
+            return result;
+          }
+        }
+      } catch (_) {}
+    }
+
+    audioPreviewCache.set(cacheKey, null);
+    return null;
+  }
+
+  function setupMusicAudioCapsule(capsule, title, creator) {
+    const toggleBtn = capsule.querySelector('.audio-play-toggle-btn');
+    const toggleIcon = capsule.querySelector('.audio-toggle-icon');
+    const progressFill = capsule.querySelector('.audio-progress-fill');
+    const timeStamp = capsule.querySelector('.audio-time-stamp');
+    const sourceBadge = capsule.querySelector('.audio-source-badge');
+
+    let audioUrl = null;
+    let audioObj = null;
+
+    toggleBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+
+      // If already active, toggle play/pause
+      if (globalActiveCapsule === capsule && globalActiveAudio) {
+        if (!globalActiveAudio.paused) {
+          globalActiveAudio.pause();
+          capsule.classList.remove('playing');
+          if (toggleIcon) toggleIcon.textContent = '▶';
+          return;
+        } else {
+          try {
+            await globalActiveAudio.play();
+            capsule.classList.add('playing');
+            if (toggleIcon) toggleIcon.textContent = '⏸';
+          } catch (_) {}
+          return;
+        }
+      }
+
+      // Stop any other card audio
+      stopCurrentAudio();
+
+      // Fetch preview if not loaded yet
+      if (!audioUrl) {
+        capsule.classList.add('loading');
+        if (toggleIcon) toggleIcon.textContent = '⏳';
+        try {
+          const previewData = await fetchAudioPreview(title, creator);
+          if (previewData && previewData.previewUrl) {
+            audioUrl = previewData.previewUrl;
+          } else {
+            capsule.classList.remove('loading');
+            if (toggleIcon) toggleIcon.textContent = '✕';
+            if (sourceBadge) sourceBadge.textContent = 'Preview Unavailable';
+            showToast(`No audio preview found for "${title}"`);
+            return;
+          }
+        } catch (_) {
+          capsule.classList.remove('loading');
+          if (toggleIcon) toggleIcon.textContent = '✕';
+          return;
+        }
+      }
+
+      capsule.classList.remove('loading');
+
+      // Create new HTML5 Audio
+      audioObj = new Audio(audioUrl);
+      globalActiveAudio = audioObj;
+      globalActiveCapsule = capsule;
+
+      audioObj.addEventListener('timeupdate', () => {
+        if (!audioObj.duration) return;
+        const pct = (audioObj.currentTime / audioObj.duration) * 100;
+        if (progressFill) progressFill.style.width = `${pct}%`;
+        if (timeStamp) {
+          timeStamp.textContent = `${formatAudioTime(audioObj.currentTime)} / ${formatAudioTime(audioObj.duration || 30)}`;
+        }
+      });
+
+      audioObj.addEventListener('play', () => {
+        capsule.classList.add('playing');
+        if (toggleIcon) toggleIcon.textContent = '⏸';
+      });
+
+      audioObj.addEventListener('pause', () => {
+        if (globalActiveCapsule === capsule) {
+          capsule.classList.remove('playing');
+          if (toggleIcon) toggleIcon.textContent = '▶';
+        }
+      });
+
+      audioObj.addEventListener('ended', () => {
+        stopCurrentAudio();
+      });
+
+      audioObj.addEventListener('error', () => {
+        stopCurrentAudio();
+        showToast('Audio playback error');
+      });
+
+      try {
+        await audioObj.play();
+      } catch (err) {
+        console.warn('Playback error', err);
+        stopCurrentAudio();
+      }
+    });
+
+    // Quiet background pre-fetch
+    fetchAudioPreview(title, creator).then(p => {
+      if (p && p.previewUrl) {
+        audioUrl = p.previewUrl;
+        if (sourceBadge && p.artistName) {
+          sourceBadge.title = `${p.trackName} by ${p.artistName}`;
+        }
+      }
+    }).catch(() => {});
+  }
+
   // 🎬 Trailer / Cinema Player Elements (Feature 1)
   const trailerModal = document.getElementById('trailerModal');
   const trailerBackdrop = document.getElementById('trailerBackdrop');
@@ -360,6 +588,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   async function openTrailerModal(item, category) {
     if (!item) return;
+
+    // Halt any playing card audio preview
+    stopCurrentAudio();
 
     currentModalSession++;
     const thisSession = currentModalSession;
@@ -1242,6 +1473,31 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="card-why-box">
             <p>${escapeHTML(item.why || 'Carefully curated for your requested mood and preferences.')}</p>
           </div>
+
+          ${category === 'Music' ? `
+          <!-- 🎧 30-Second Real Audio Preview Player (Feature 1) -->
+          <div class="music-audio-capsule" data-title="${escapeHTML(item.title)}" data-creator="${escapeHTML(item.creator || '')}">
+            <button type="button" class="audio-play-toggle-btn" title="Play 30s official audio preview">
+              <span class="audio-toggle-icon">▶</span>
+            </button>
+            <div class="audio-meta-track">
+              <div class="audio-title-row">
+                <span class="audio-source-badge">🎵 30s Audio Preview</span>
+                <span class="audio-time-stamp">0:00 / 0:30</span>
+              </div>
+              <div class="audio-progress-bar-wrap">
+                <div class="audio-progress-fill"></div>
+              </div>
+            </div>
+            <div class="audio-waveform-bars" title="Soundwave Visualizer">
+              <span class="soundwave-bar bar-1"></span>
+              <span class="soundwave-bar bar-2"></span>
+              <span class="soundwave-bar bar-3"></span>
+              <span class="soundwave-bar bar-4"></span>
+              <span class="soundwave-bar bar-5"></span>
+            </div>
+          </div>
+          ` : ''}
         </div>
       </div>
 
@@ -1282,6 +1538,14 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
+
+    // 🎧 Setup 30s Audio Preview for Music cards (Feature 1)
+    if (category === 'Music') {
+      const capsule = card.querySelector('.music-audio-capsule');
+      if (capsule) {
+        setupMusicAudioCapsule(capsule, item.title, item.creator);
+      }
+    }
 
     // 🔄 Swap Button Click
     const swapBtn = card.querySelector('.swap-card-btn');
@@ -1404,6 +1668,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 6B. Render Bento Cards with Staggered Cascade Entrance
   // ========================================================
   function renderVisionCards(items, category) {
+    // Halt any playing card audio preview
+    stopCurrentAudio();
+
     currentRecommendations = items;
     currentCategory = category;
     cardsGrid.innerHTML = '';
@@ -1427,6 +1694,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // "Search Again" button resets focus
   newSearchBtn.addEventListener('click', () => {
+    stopCurrentAudio();
     tweakActionPills.forEach(p => p.classList.remove('active'));
     currentActiveTweak = null;
     if (customTweakInput) customTweakInput.value = '';
@@ -1582,6 +1850,358 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ========================================================
+  // 🔗 Feature 3: Shareable Vibe Link Controller
+  // ========================================================
+  function generateShareUrl() {
+    if (!currentRecommendations || currentRecommendations.length === 0) return null;
+
+    const payload = {
+      c: currentCategory,
+      m: currentMood,
+      f: currentFavorites || '',
+      d: currentDiscoveryMode || 'mood',
+      r: currentRecommendations.map(item => ({
+        title: item.title,
+        creator: item.creator || '',
+        year: item.year || '',
+        why: item.why || '',
+        tag: item.tag || ''
+      }))
+    };
+
+    try {
+      const jsonStr = JSON.stringify(payload);
+      const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+      const baseUrl = window.location.origin + window.location.pathname;
+      return `${baseUrl}?share=${encodeURIComponent(b64)}`;
+    } catch (err) {
+      console.error('Failed to encode share link', err);
+      return window.location.href;
+    }
+  }
+
+  function openShareModal() {
+    if (!currentRecommendations || currentRecommendations.length === 0) {
+      showToast('Generate recommendations first to share!');
+      return;
+    }
+
+    const shareUrl = generateShareUrl();
+    if (!shareUrl) return;
+
+    let catEmoji = '🎬';
+    if (currentCategory === 'Music') catEmoji = '🎵';
+    else if (currentCategory === 'Books') catEmoji = '📚';
+
+    if (shareSummaryCat) shareSummaryCat.textContent = `${catEmoji} ${currentCategory}`;
+    if (shareSummaryMood) {
+      shareSummaryMood.textContent = currentMood ? `"${currentMood}"` : 'AI Curated';
+    }
+
+    if (shareItemsPreview) {
+      shareItemsPreview.innerHTML = currentRecommendations.map((item, idx) => `
+        <span class="share-item-chip">
+          <span class="chip-idx">#0${idx + 1}</span>
+          <span class="chip-title">${escapeHTML(item.title)}</span>
+        </span>
+      `).join('');
+    }
+
+    if (shareLinkInput) {
+      shareLinkInput.value = shareUrl;
+      shareLinkInput.select();
+    }
+
+    const caption = `Check out my curated ${currentCategory} shortlist for "${currentMood || 'good vibes'}" on RecoMind! ⚡`;
+
+    if (shareWhatsAppBtn) {
+      shareWhatsAppBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(caption + ' ' + shareUrl)}`;
+    }
+    if (shareTwitterBtn) {
+      shareTwitterBtn.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(caption)}&url=${encodeURIComponent(shareUrl)}`;
+    }
+    if (shareTelegramBtn) {
+      shareTelegramBtn.href = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(caption)}`;
+    }
+
+    // Auto copy on modal trigger for 1-click speed
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      if (copyShareBtnTxt) copyShareBtnTxt.textContent = 'Copied! ✓';
+      showToast('🔗 Shareable Vibe Link copied to clipboard!');
+    }).catch(() => {
+      if (copyShareBtnTxt) copyShareBtnTxt.textContent = 'Copy Link';
+    });
+
+    if (shareModal) shareModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeShareModal() {
+    if (shareModal) shareModal.classList.add('hidden');
+    document.body.style.overflow = '';
+    if (copyShareBtnTxt) copyShareBtnTxt.textContent = 'Copy Link';
+  }
+
+  if (shareVibeBtn) {
+    shareVibeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openShareModal();
+    });
+  }
+
+  if (copyShareLinkBtn) {
+    copyShareLinkBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (shareLinkInput && shareLinkInput.value) {
+        navigator.clipboard.writeText(shareLinkInput.value).then(() => {
+          if (copyShareBtnTxt) copyShareBtnTxt.textContent = 'Copied! ✓';
+          showToast('🔗 Link copied to clipboard!');
+        }).catch(() => {
+          showToast('Failed to copy link.');
+        });
+      }
+    });
+  }
+
+  if (closeShareBtn) closeShareBtn.addEventListener('click', closeShareModal);
+  if (doneShareBtn) doneShareBtn.addEventListener('click', closeShareModal);
+  if (shareBackdrop) shareBackdrop.addEventListener('click', closeShareModal);
+
+  // ========================================================
+  // 🧬 Feature 4: User "Taste DNA" & Analytics Matrix
+  // ========================================================
+  async function computeTasteDNA() {
+    let historyEntries = [];
+    try {
+      const res = await fetch('/api/history');
+      if (res.ok) {
+        const d = await res.json();
+        historyEntries = d.data || [];
+      }
+    } catch (_) {}
+
+    let watchlistItems = [];
+    try {
+      watchlistItems = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]');
+    } catch (_) {}
+
+    let movieCount = 0;
+    let musicCount = 0;
+    let bookCount = 0;
+    const tagFrequency = new Map();
+    const moodTokens = [];
+
+    historyEntries.forEach(entry => {
+      const cat = entry.category || 'Movies';
+      const recs = entry.recommendations || [];
+      const weight = recs.length || 1;
+      if (cat === 'Movies') movieCount += weight;
+      else if (cat === 'Music') musicCount += weight;
+      else if (cat === 'Books') bookCount += weight;
+
+      if (entry.mood) moodTokens.push(entry.mood.toLowerCase());
+
+      recs.forEach(rec => {
+        if (rec.tag) {
+          const cleanTag = rec.tag.trim();
+          tagFrequency.set(cleanTag, (tagFrequency.get(cleanTag) || 0) + 1);
+        }
+      });
+    });
+
+    watchlistItems.forEach(item => {
+      const cat = item.category || 'Movies';
+      if (cat === 'Movies') movieCount += 2;
+      else if (cat === 'Music') musicCount += 2;
+      else if (cat === 'Books') bookCount += 2;
+
+      if (item.tag) {
+        const cleanTag = item.tag.trim();
+        tagFrequency.set(cleanTag, (tagFrequency.get(cleanTag) || 0) + 2);
+      }
+    });
+
+    const totalPoints = movieCount + musicCount + bookCount;
+    const totalPicks = historyEntries.reduce((acc, e) => acc + (e.recommendations ? e.recommendations.length : 6), 0);
+
+    let mPct = 35, sPct = 35, bPct = 30;
+    if (totalPoints > 0) {
+      mPct = Math.round((movieCount / totalPoints) * 100);
+      sPct = Math.round((musicCount / totalPoints) * 100);
+      bPct = Math.max(0, 100 - mPct - sPct);
+    }
+
+    if (segMovies) segMovies.style.width = `${mPct}%`;
+    if (segMusic) segMusic.style.width = `${sPct}%`;
+    if (segBooks) segBooks.style.width = `${bPct}%`;
+    if (pctMovies) pctMovies.textContent = `${mPct}%`;
+    if (pctMusic) pctMusic.textContent = `${sPct}%`;
+    if (pctBooks) pctBooks.textContent = `${bPct}%`;
+    if (dnaTotalCountLabel) {
+      dnaTotalCountLabel.textContent = `${totalPicks} Total Curated Picks`;
+    }
+
+    if (dnaMetricCurations) dnaMetricCurations.textContent = String(historyEntries.length);
+    if (dnaMetricSaved) dnaMetricSaved.textContent = String(watchlistItems.length);
+
+    let dominant = 'Movies';
+    if (musicCount > movieCount && musicCount >= bookCount) dominant = 'Music';
+    else if (bookCount > movieCount && bookCount > musicCount) dominant = 'Books';
+    if (dnaMetricTopCategory) dnaMetricTopCategory.textContent = dominant;
+
+    if (dnaMetricAffinity) {
+      if (totalPoints > 20) dnaMetricAffinity.textContent = 'Ultra 99%';
+      else if (totalPoints > 10) dnaMetricAffinity.textContent = 'High 94%';
+      else if (totalPoints > 0) dnaMetricAffinity.textContent = 'Calibrated 88%';
+      else dnaMetricAffinity.textContent = 'Fresh Canvas';
+    }
+
+    const sortedTags = Array.from(tagFrequency.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8);
+
+    if (dnaVibesCloud) {
+      if (sortedTags.length > 0) {
+        dnaVibesCloud.innerHTML = sortedTags.map(([tag, count]) => `
+          <span class="dna-vibe-pill">
+            <span class="vibe-pill-name">${escapeHTML(tag)}</span>
+            <span class="vibe-pill-count">×${count}</span>
+          </span>
+        `).join('');
+      } else {
+        const samples = ['Mind-Bending', 'Lo-Fi Chill', 'Psychological', 'Cyberpunk', 'Cozy Fantasy', 'Epic Lore'];
+        dnaVibesCloud.innerHTML = samples.map(t => `
+          <span class="dna-vibe-pill sample">
+            <span class="vibe-pill-name">${t}</span>
+            <span class="vibe-pill-count">Ready</span>
+          </span>
+        `).join('');
+      }
+    }
+
+    // Persona Classification
+    const allText = (moodTokens.join(' ') + ' ' + sortedTags.map(t => t[0]).join(' ')).toLowerCase();
+
+    let pEmoji = '🌌';
+    let pTitle = 'The Existential Explorer';
+    let pDesc = 'You gravitate toward complex narratives, cerebral mysteries, and cinematic odysseys that question reality. Your taste prioritizes depth, high stakes, and unforgettable philosophical tension.';
+    let pTier = 'Cosmic Tier';
+
+    if (allText.includes('noir') || allText.includes('mystery') || allText.includes('whodunit') || allText.includes('detective') || allText.includes('dark')) {
+      pEmoji = '🕵️‍♂️';
+      pTitle = 'The Midnight Sleuth';
+      pDesc = 'You thrive in shadowy atmospheres, intricate psychological chess matches, and high-tension noir storytelling where every clue matters and nothing is as it seems.';
+      pTier = 'Noir Matrix';
+    } else if (allText.includes('cozy') || allText.includes('warm') || allText.includes('wholesome') || allText.includes('coffee') || allText.includes('uplifting') || allText.includes('ghibli')) {
+      pEmoji = '☕';
+      pTitle = 'The Warm-Hearted Soul';
+      pDesc = 'Your heart beats for comfort, aesthetic beauty, and emotionally restorative experiences. You seek out cozy magic, uplifting humanity, and comforting soundscapes.';
+      pTier = 'Empathic Core';
+    } else if (allText.includes('action') || allText.includes('adrenaline') || allText.includes('cyberpunk') || allText.includes('heist') || allText.includes('workout')) {
+      pEmoji = '⚡';
+      pTitle = 'The Adrenaline Tactician';
+      pDesc = 'Fast momentum, razor-sharp kinetic energy, and pulse-pounding stakes define your taste. You love relentless pacing, clever heists, and neon-drenched thrills.';
+      pTier = 'Kinetic Wave';
+    } else if (dominant === 'Music') {
+      pEmoji = '🎧';
+      pTitle = 'The Sonic Audiophile';
+      pDesc = 'Sound is your primary sanctuary. You possess an ear for textured production, nostalgic synth frequencies, and immersive acoustics that craft entire emotional worlds.';
+      pTier = 'Harmonic Matrix';
+    } else if (dominant === 'Books') {
+      pEmoji = '📚';
+      pTitle = 'The Cerebral Bibliophile';
+      pDesc = 'You crave intellectual nourishment, expansive worldbuilding, and transformative prose. Books are your portals into philosophical depths and timeless human wisdom.';
+      pTier = 'Archival Scholar';
+    } else if (totalPoints > 15) {
+      pEmoji = '🎭';
+      pTitle = 'The Renaissance Connoisseur';
+      pDesc = 'A true creative polymath with an extraordinarily eclectic appetite. You effortlessly traverse cinema, soundwaves, and literature without genre boundaries.';
+      pTier = 'Polymath Grandmaster';
+    }
+
+    if (personaEmoji) personaEmoji.textContent = pEmoji;
+    if (personaTitle) personaTitle.textContent = pTitle;
+    if (personaDesc) personaDesc.textContent = pDesc;
+    if (dnaTierBadge) dnaTierBadge.textContent = pTier;
+  }
+
+  async function openTasteDnaModal() {
+    await computeTasteDNA();
+    if (tasteDnaModal) tasteDnaModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeTasteDnaModal() {
+    if (tasteDnaModal) tasteDnaModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  if (tasteDnaNavBtn) tasteDnaNavBtn.addEventListener('click', openTasteDnaModal);
+  if (menuTasteDnaBtn) {
+    menuTasteDnaBtn.addEventListener('click', () => {
+      if (profileDropdown) profileDropdown.classList.add('hidden');
+      openTasteDnaModal();
+    });
+  }
+  if (closeTasteDnaBtn) closeTasteDnaBtn.addEventListener('click', closeTasteDnaModal);
+  if (doneTasteDnaBtn) doneTasteDnaBtn.addEventListener('click', closeTasteDnaModal);
+  if (tasteDnaBackdrop) tasteDnaBackdrop.addEventListener('click', closeTasteDnaModal);
+
+  // ========================================================
+  // 🔗 Auto-Loader for Shared Shortlists (?share=...)
+  // ========================================================
+  function checkAndLoadSharedVibe() {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const shareParam = urlParams.get('share');
+      if (!shareParam) return;
+
+      const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(shareParam))));
+      const data = JSON.parse(jsonStr);
+
+      if (data && Array.isArray(data.r) && data.r.length > 0) {
+        if (data.c && ['Movies', 'Music', 'Books'].includes(data.c)) {
+          currentCategory = data.c;
+          segmentTabs.forEach(t => {
+            const isSelected = t.getAttribute('data-category') === data.c;
+            t.classList.toggle('active', isSelected);
+            t.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+          });
+          updateGliderPosition();
+          updateCategoryTheme(data.c);
+        }
+
+        if (data.d && ['mood', 'title'].includes(data.d)) {
+          setDiscoveryMode(data.d);
+        }
+
+        if (data.m) {
+          currentMood = data.m;
+          if (moodInput) {
+            moodInput.value = data.m;
+            if (moodCounter) moodCounter.textContent = `${data.m.length} / 250`;
+          }
+        }
+        if (data.f && favoritesInput) {
+          currentFavorites = data.f;
+          favoritesInput.value = data.f;
+        }
+
+        renderVisionCards(data.r, currentCategory);
+        showToast(`🌟 Loaded shared ${currentCategory} shortlist!`);
+
+        setTimeout(() => {
+          if (resultsSection) {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 350);
+      }
+    } catch (err) {
+      console.warn('Failed to parse shared shortlist:', err);
+    }
+  }
+
   // History Count
   async function refreshHistoryCount() {
     try {
@@ -1682,6 +2302,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // 7. USER AUTHENTICATION & PROFILE LOGIC
   // ========================================================
 
+  function setElementAvatar(el, avatarVal) {
+    if (!el) return;
+    if (avatarVal && (avatarVal.startsWith('http://') || avatarVal.startsWith('https://'))) {
+      el.innerHTML = `<img src="${avatarVal}" alt="avatar" style="width:100%; height:100%; border-radius:50%; object-fit:cover; display:block;" referrerpolicy="no-referrer" />`;
+    } else {
+      el.textContent = avatarVal || '⚡';
+    }
+  }
+
   function updateUserUI() {
     if (currentUser) {
       if (authNavBtn) {
@@ -1692,7 +2321,7 @@ document.addEventListener('DOMContentLoaded', () => {
           authNavBtn.classList.remove('is-admin');
         }
       }
-      if (authBtnAvatar) authBtnAvatar.textContent = currentUser.avatar || '⚡';
+      setElementAvatar(authBtnAvatar, currentUser.avatar);
       if (authBtnName) authBtnName.textContent = currentUser.fullName ? currentUser.fullName.split(' ')[0] : (currentUser.username || 'User');
 
       // Admin button in header
@@ -1705,7 +2334,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Dropdown details
-      if (menuAvatar) menuAvatar.textContent = currentUser.avatar || '⚡';
+      setElementAvatar(menuAvatar, currentUser.avatar);
       if (menuFullName) menuFullName.textContent = currentUser.fullName || 'User';
       if (menuHandle) menuHandle.textContent = `@${currentUser.username || 'user'}`;
       if (menuRoleBadge) {
@@ -1931,41 +2560,99 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Google Sign-In 1-Click
-  if (googleAuthBtn) {
-    googleAuthBtn.addEventListener('click', async () => {
-      const email = prompt('Sign in with Google Account:\nEnter your Google Email (or press OK to login with demo Google profile):', 'aayushmaan.anand@gmail.com');
-      if (!email || !email.trim()) return;
+  // ========================================================
+  // 🌐 Official Real Google OAuth Sign-In (Google Identity Services)
+  // Client ID: 12540904255-48q81cegoq7rouaht6g070kov1v8jug9.apps.googleusercontent.com
+  // ========================================================
+  const GOOGLE_CLIENT_ID = '12540904255-48q81cegoq7rouaht6g070kov1v8jug9.apps.googleusercontent.com';
+  let googleTokenClient = null;
 
-      const namePart = email.split('@')[0];
-      const displayName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+  function initRealGoogleAuth() {
+    if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
+      setTimeout(initRealGoogleAuth, 400);
+      return;
+    }
 
-      try {
-        const res = await fetch('/api/auth/google', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: email.trim(),
-            name: displayName,
-            picture: '⚡',
-            googleId: 'g_' + Math.random().toString(36).substr(2, 8)
-          })
-        });
-        const data = await res.json();
-        if (data.success && data.user) {
-          currentUser = data.user;
-          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser));
-          updateUserUI();
-          closeAuthModal();
-          showToast(`Logged in via Google as ${currentUser.fullName}!`);
-        } else {
-          showAuthAlert(data.message || 'Google authentication failed');
+    try {
+      googleTokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'email profile openid',
+        callback: async (tokenResponse) => {
+          if (tokenResponse && tokenResponse.access_token) {
+            try {
+              // Fetch verified Google User Profile (Name, Email, Real Picture, Google ID)
+              const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+              });
+              const googleProfile = await userInfoRes.json();
+
+              if (!googleProfile || !googleProfile.email) {
+                showAuthAlert('Unable to retrieve Google profile.');
+                return;
+              }
+
+              // Sync with RecoMind server backend
+              const res = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: googleProfile.email,
+                  name: googleProfile.name || googleProfile.email.split('@')[0],
+                  picture: googleProfile.picture || '⚡',
+                  googleId: googleProfile.sub
+                })
+              });
+
+              const data = await res.json();
+              if (data.success && data.user) {
+                currentUser = data.user;
+                localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser));
+                updateUserUI();
+                closeAuthModal();
+                showToast(`Welcome ${currentUser.fullName}! (Signed in with Google) 🎉`);
+              } else {
+                showAuthAlert(data.message || 'Google authentication failed.');
+              }
+            } catch (err) {
+              console.error('Google profile fetch error:', err);
+              showAuthAlert('Error syncing Google profile with server.');
+            }
+          } else if (tokenResponse && tokenResponse.error) {
+            console.warn('Google sign-in was dismissed or closed.');
+          }
         }
-      } catch (err) {
-        showAuthAlert('Google Sign-In service error');
+      });
+    } catch (err) {
+      console.warn('Google Identity initialization notice:', err);
+    }
+  }
+
+  // Trigger Google Sign-In Popup
+  if (googleAuthBtn) {
+    googleAuthBtn.addEventListener('click', () => {
+      hideAuthAlert();
+
+      if (typeof google === 'undefined' || !google.accounts) {
+        showToast('Connecting to Google services... Please click again in 2 seconds.');
+        initRealGoogleAuth();
+        return;
+      }
+
+      if (!googleTokenClient) {
+        initRealGoogleAuth();
+      }
+
+      if (googleTokenClient) {
+        // Triggers the official Google OAuth account picker popup!
+        googleTokenClient.requestAccessToken({ prompt: 'select_account' });
+      } else {
+        showToast('Google Sign-In is initializing...');
       }
     });
   }
+
+  // Initialize on page load
+  initRealGoogleAuth();
 
   // ========================================================
   // 8. COMMUNITY REVIEWS & RATINGS LOGIC
@@ -2427,6 +3114,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (adminModal && !adminModal.classList.contains('hidden')) {
         closeAdminModal();
       }
+      if (shareModal && !shareModal.classList.contains('hidden')) {
+        closeShareModal();
+      }
+      if (tasteDnaModal && !tasteDnaModal.classList.contains('hidden')) {
+        closeTasteDnaModal();
+      }
       if (profileDropdown && !profileDropdown.classList.contains('hidden')) {
         profileDropdown.classList.add('hidden');
       }
@@ -2450,4 +3143,5 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshHistoryCount();
   updateWatchlistBadge();
   updateUserUI();
+  checkAndLoadSharedVibe();
 });
