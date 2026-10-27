@@ -137,6 +137,8 @@ body.vision-body {
    2. Floating Vision Glass Header (Screenshot Match)
    ======================================================== */
 .vision-header {
+  position: relative;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -327,6 +329,7 @@ body.vision-body {
 /* 👤 User Auth & Profile Capsule */
 .user-auth-capsule-wrap {
   position: relative;
+  z-index: 101;
 }
 
 .user-auth-btn {
@@ -334,6 +337,7 @@ body.vision-body {
   border-color: rgba(129, 140, 248, 0.4) !important;
   color: #ffffff !important;
   transition: all 0.25s var(--ease-smooth);
+  cursor: pointer;
 }
 
 .user-auth-btn:hover {
@@ -371,13 +375,14 @@ body.vision-body {
   top: calc(100% + 10px);
   right: 0;
   width: 250px;
-  background: rgba(14, 18, 32, 0.96);
+  background: rgba(14, 18, 32, 0.98);
   backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   border: 1px solid var(--border-specular);
   border-radius: var(--radius-md);
   padding: 16px;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), 0 0 30px rgba(99, 102, 241, 0.2);
-  z-index: 500;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), 0 0 30px rgba(99, 102, 241, 0.25);
+  z-index: 1000;
   animation: modalVisionIn 0.2s var(--ease-smooth);
 }
 
@@ -2746,25 +2751,28 @@ input[type="text"] {
 
 .auth-tabs-track {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   background: rgba(8, 12, 22, 0.7);
   padding: 4px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-glass);
   margin-bottom: 20px;
+  gap: 3px;
 }
 
 .auth-tab-btn {
   background: transparent;
   border: none;
   color: #94a3b8;
-  padding: 8px 14px;
+  padding: 8px 8px;
   border-radius: var(--radius-pill);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .auth-tab-btn.active {

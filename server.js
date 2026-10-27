@@ -441,9 +441,14 @@ app.post('/api/recommend', async (req, res) => {
 
     const recommendations = await callGemini(trimmedCategory, trimmedMood, trimmedFavorites, searchMode);
 
-    // Save to persistence layer (data/history.json)
+    const reqUserId = req.body.userId || req.headers['x-user-id'] || 'guest';
+    const reqUsername = req.body.username || 'guest';
+
+    // Save to persistence layer (data/history.json) with user isolation
     const sessionRecord = {
       id: 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      userId: reqUserId,
+      username: reqUsername,
       category: trimmedCategory,
       mood: trimmedMood,
       favorites: trimmedFavorites,
@@ -520,24 +525,38 @@ app.post('/api/recommend/swap', async (req, res) => {
   }
 });
 
-// 2. GET /api/history - Retrieve past recommendation sessions
+// 2. GET /api/history - Retrieve user's personal past recommendation sessions
 app.get('/api/history', (req, res) => {
   try {
+    const reqUserId = req.headers['x-user-id'] || req.query.userId || 'guest';
     const history = readHistory();
-    return res.json({ success: true, data: history.entries || [] });
+    // Filter history specifically for the requesting user
+    const userEntries = (history.entries || []).filter(e => {
+      if (reqUserId === 'guest') {
+        return !e.userId || e.userId === 'guest';
+      }
+      return e.userId === reqUserId;
+    });
+    return res.json({ success: true, data: userEntries });
   } catch (err) {
     console.error('Error fetching history:', err);
     return res.status(500).json({ success: false, message: 'Failed to retrieve history.' });
   }
 });
 
-
-
-// 3. DELETE /api/history - Clear history
+// 3. DELETE /api/history - Clear current user's history
 app.delete('/api/history', (req, res) => {
   try {
-    fs.writeFileSync(HISTORY_FILE, JSON.stringify({ entries: [] }, null, 2));
-    return res.json({ success: true, message: 'History cleared successfully.' });
+    const reqUserId = req.headers['x-user-id'] || req.query.userId || 'guest';
+    const history = readHistory();
+    history.entries = (history.entries || []).filter(e => {
+      if (reqUserId === 'guest') {
+        return e.userId && e.userId !== 'guest';
+      }
+      return e.userId !== reqUserId;
+    });
+    fs.writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2));
+    return res.json({ success: true, message: 'Your history cleared successfully.' });
   } catch (err) {
     console.error('Error clearing history:', err);
     return res.status(500).json({ success: false, message: 'Failed to clear history.' });
@@ -769,8 +788,6 @@ app.post('/api/auth/google', (req, res) => {
     return res.status(500).json({ success: false, message: 'Server error during Google sign-in' });
   }
 });
-
-
 
 // Validate session
 app.get('/api/auth/me', (req, res) => {

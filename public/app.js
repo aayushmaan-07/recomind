@@ -174,7 +174,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // User Authentication, Community Reviews & Admin Elements
   // ========================================================
   const AUTH_STORAGE_KEY = 'recomind_auth_user';
-  let currentUser = JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY) || 'null');
+  let currentUser = null;
+  try {
+    const rawStored = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (rawStored) {
+      const parsed = JSON.parse(rawStored);
+      if (parsed && parsed.id && (parsed.username || parsed.fullName)) {
+        currentUser = parsed;
+      } else {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+      }
+    }
+  } catch (_) {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+  }
 
   // Header Nav & Profile Dropdown Elements
   const adminNavBtn = document.getElementById('adminNavBtn');
@@ -188,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuRoleBadge = document.getElementById('menuRoleBadge');
   const menuProviderBadge = document.getElementById('menuProviderBadge');
   const menuAdminBtn = document.getElementById('menuAdminBtn');
+  const menuSwitchAccountBtn = document.getElementById('menuSwitchAccountBtn');
   const logoutBtn = document.getElementById('logoutBtn');
 
   // Auth Modal Elements
@@ -852,28 +866,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ========================================================
-  // 3. ❤️ Watchlist / Saved Collection Logic
+  // 3. ❤️ Watchlist / Saved Collection Logic (Account-Isolated)
   // ========================================================
+  function getWatchlistKey() {
+    return currentUser && currentUser.id ? `recomind_watchlist_${currentUser.id}` : 'recomind_watchlist_guest';
+  }
+
   function getWatchlist() {
     try {
-      return JSON.parse(localStorage.getItem(WATCHLIST_KEY)) || [];
+      return JSON.parse(localStorage.getItem(getWatchlistKey())) || [];
     } catch {
       return [];
     }
   }
 
   function saveWatchlist(items) {
-    localStorage.setItem(WATCHLIST_KEY, JSON.stringify(items));
+    localStorage.setItem(getWatchlistKey(), JSON.stringify(items));
     updateWatchlistBadge();
   }
 
   function isItemSaved(title) {
-    if (!title) return false;
+    if (!title || !currentUser || !currentUser.id) return false;
     const list = getWatchlist();
     return list.some(item => item.title.toLowerCase() === title.toLowerCase());
   }
 
   function toggleSaveItem(itemData, category) {
+    if (!currentUser || !currentUser.id) {
+      showToast('Please sign in to save items to your personal watchlist! 🔐');
+      openAuthModal('signin');
+      return false;
+    }
     const list = getWatchlist();
     const existingIndex = list.findIndex(i => i.title.toLowerCase() === itemData.title.toLowerCase());
 
@@ -900,6 +923,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateWatchlistBadge() {
+    if (!currentUser || !currentUser.id) {
+      if (watchlistBadge) watchlistBadge.classList.add('hidden');
+      return;
+    }
     const list = getWatchlist();
     const count = list.length;
     if (count > 0) {
@@ -1005,7 +1032,14 @@ document.addEventListener('DOMContentLoaded', () => {
     watchlistModal.classList.add('hidden');
   }
 
-  watchlistBtn.addEventListener('click', openWatchlist);
+  watchlistBtn.addEventListener('click', () => {
+    if (!currentUser || !currentUser.id) {
+      showToast('Please sign in to view your personal saved collection! 🔐');
+      openAuthModal('signin');
+      return;
+    }
+    openWatchlist();
+  });
   closeWatchlistBtn.addEventListener('click', closeWatchlist);
   doneWatchlistBtn.addEventListener('click', closeWatchlist);
   watchlistBackdrop.addEventListener('click', closeWatchlist);
@@ -1225,12 +1259,17 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const response = await fetch('/api/recommend', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-id': currentUser ? currentUser.id : 'guest'
+        },
         body: JSON.stringify({
           category: category,
           mood: effectiveMood,
           favorites: favorites,
-          mode: currentDiscoveryMode
+          mode: currentDiscoveryMode,
+          userId: currentUser ? currentUser.id : 'guest',
+          username: currentUser ? (currentUser.username || currentUser.fullName) : 'guest'
         })
       });
 
@@ -1578,6 +1617,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveBtn = card.querySelector('.save-card-btn');
     saveBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (!currentUser || !currentUser.id) {
+        showToast('Please sign in to save items to your personal watchlist! 🔐');
+        openAuthModal('signin');
+        return;
+      }
       const saved = toggleSaveItem(item, category);
       if (saved) {
         saveBtn.classList.add('saved');
@@ -1974,7 +2018,9 @@ document.addEventListener('DOMContentLoaded', () => {
   async function computeTasteDNA() {
     let historyEntries = [];
     try {
-      const res = await fetch('/api/history');
+      const res = await fetch('/api/history', {
+        headers: { 'x-user-id': currentUser ? currentUser.id : 'guest' }
+      });
       if (res.ok) {
         const d = await res.json();
         historyEntries = d.data || [];
@@ -1983,7 +2029,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let watchlistItems = [];
     try {
-      watchlistItems = JSON.parse(localStorage.getItem(WATCHLIST_KEY) || '[]');
+      watchlistItems = getWatchlist();
     } catch (_) {}
 
     let movieCount = 0;
@@ -2168,8 +2214,10 @@ document.addEventListener('DOMContentLoaded', () => {
             t.classList.toggle('active', isSelected);
             t.setAttribute('aria-selected', isSelected ? 'true' : 'false');
           });
-          updateGliderPosition();
-          updateCategoryTheme(data.c);
+          const activeTab = document.querySelector(`.segment-tab[data-category="${data.c}"]`);
+          if (activeTab) updateSliderPosition(activeTab, false);
+          updateAmbientTheme(data.c);
+          renderChips();
         }
 
         if (data.d && ['mood', 'title'].includes(data.d)) {
@@ -2202,10 +2250,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // History Count
+  // History Count (Account-Isolated)
   async function refreshHistoryCount() {
     try {
-      const res = await fetch('/api/history');
+      const res = await fetch('/api/history', {
+        headers: { 'x-user-id': currentUser ? currentUser.id : 'guest' }
+      });
       const data = await res.json();
       const count = (data.data || []).length;
       if (count > 0) {
@@ -2217,16 +2267,18 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (_) {}
   }
 
-  // History Modal Logic
+  // History Modal Logic (Account-Isolated)
   async function loadHistory() {
     historyBody.innerHTML = '<p style="text-align:center; color:#94a3b8; padding:30px 0;">Loading past sessions...</p>';
     try {
-      const res = await fetch('/api/history');
+      const res = await fetch('/api/history', {
+        headers: { 'x-user-id': currentUser ? currentUser.id : 'guest' }
+      });
       const data = await res.json();
       const entries = data.data || [];
 
       if (entries.length === 0) {
-        historyBody.innerHTML = '<p style="text-align:center; color:#94a3b8; padding:35px 0;">No saved curations yet. Try generating some picks first!</p>';
+        historyBody.innerHTML = '<p style="text-align:center; color:#94a3b8; padding:35px 0;">No saved curations yet for this account. Try generating some picks first!</p>';
         return;
       }
 
@@ -2287,11 +2339,14 @@ document.addEventListener('DOMContentLoaded', () => {
   clearHistoryBtn.addEventListener('click', async () => {
     if (!confirm('Are you sure you want to clear your recommendation history?')) return;
     try {
-      const res = await fetch('/api/history', { method: 'DELETE' });
+      const res = await fetch('/api/history', {
+        method: 'DELETE',
+        headers: { 'x-user-id': currentUser ? currentUser.id : 'guest' }
+      });
       if (res.ok) {
         refreshHistoryCount();
         loadHistory();
-        showToast('History cleared.');
+        showToast('Your history cleared.');
       }
     } catch (err) {
       alert('Failed to clear history.');
@@ -2359,6 +2414,36 @@ document.addEventListener('DOMContentLoaded', () => {
       if (menuAdminBtn) menuAdminBtn.classList.add('hidden');
       if (profileDropdown) profileDropdown.classList.add('hidden');
     }
+
+    // Refresh account-specific counts & watchlist badges
+    updateWatchlistBadge();
+    refreshHistoryCount();
+
+    // Refresh heart status on visible cards
+    document.querySelectorAll('.save-card-btn').forEach(btn => {
+      const t = btn.getAttribute('data-title');
+      if (t) {
+        const saved = isItemSaved(t);
+        btn.classList.toggle('saved', saved);
+        const txt = btn.querySelector('.save-btn-txt');
+        if (txt) txt.textContent = saved ? 'Saved' : 'Save';
+        const svg = btn.querySelector('svg');
+        if (svg) svg.setAttribute('fill', saved ? '#f43f5e' : 'none');
+      }
+    });
+  }
+
+  function showAuthAlert(msg, type = 'error') {
+    if (!authAlert) return;
+    authAlert.textContent = msg;
+    authAlert.className = `auth-alert-box ${type === 'success' ? 'success' : 'error'}`;
+    authAlert.classList.remove('hidden');
+  }
+
+  function hideAuthAlert() {
+    if (!authAlert) return;
+    authAlert.classList.add('hidden');
+    authAlert.textContent = '';
   }
 
   function openAuthModal(mode = 'signin') {
@@ -2367,7 +2452,8 @@ document.addEventListener('DOMContentLoaded', () => {
     hideAuthAlert();
     authModal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    if (authUsername) authUsername.focus();
+    if (mode === 'signin' && authUsername) authUsername.focus();
+    else if (mode === 'register' && authFullName) authFullName.focus();
   }
 
   function closeAuthModal() {
@@ -2376,34 +2462,28 @@ document.addEventListener('DOMContentLoaded', () => {
     hideAuthAlert();
   }
 
+  window.openAuthModal = openAuthModal;
+  window.closeAuthModal = closeAuthModal;
+
   function switchAuthTab(mode) {
     authMode = mode;
     hideAuthAlert();
+    if (tabSignIn) tabSignIn.classList.toggle('active', mode === 'signin');
+    if (tabRegister) tabRegister.classList.toggle('active', mode === 'register');
+
     if (mode === 'signin') {
-      tabSignIn.classList.add('active');
-      tabRegister.classList.remove('active');
       authModalTitle.textContent = 'Welcome to RecoMind';
-      fullNameGroup.classList.add('hidden');
-      avatarPickerGroup.classList.add('hidden');
-      authSubmitTxt.textContent = 'Log In';
+      if (fullNameGroup) fullNameGroup.classList.add('hidden');
+      if (avatarPickerGroup) avatarPickerGroup.classList.add('hidden');
+      if (authSubmitTxt) authSubmitTxt.textContent = 'Log In';
+      if (authUsername) authUsername.focus();
     } else {
-      tabRegister.classList.add('active');
-      tabSignIn.classList.remove('active');
       authModalTitle.textContent = 'Create RecoMind Account';
-      fullNameGroup.classList.remove('hidden');
-      avatarPickerGroup.classList.remove('hidden');
-      authSubmitTxt.textContent = 'Create Account';
+      if (fullNameGroup) fullNameGroup.classList.remove('hidden');
+      if (avatarPickerGroup) avatarPickerGroup.classList.remove('hidden');
+      if (authSubmitTxt) authSubmitTxt.textContent = 'Create Account';
+      if (authFullName) authFullName.focus();
     }
-  }
-
-  function showAuthAlert(msg, type = 'error') {
-    authAlert.textContent = msg;
-    authAlert.className = `auth-alert-box ${type}`;
-    authAlert.classList.remove('hidden');
-  }
-
-  function hideAuthAlert() {
-    authAlert.classList.add('hidden');
   }
 
   if (tabSignIn) tabSignIn.addEventListener('click', () => switchAuthTab('signin'));
@@ -2429,15 +2509,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Header Nav Button Click
-  if (authNavBtn) {
-    authNavBtn.addEventListener('click', (e) => {
+  // Header Nav Button Click & Global Handler
+  let isNavClickDebounced = false;
+  function handleAuthNavClick(e) {
+    if (e) {
+      e.preventDefault();
       e.stopPropagation();
-      if (!currentUser) {
-        openAuthModal('signin');
-      } else {
-        if (profileDropdown) profileDropdown.classList.toggle('hidden');
+    }
+    if (isNavClickDebounced) return;
+    isNavClickDebounced = true;
+    setTimeout(() => { isNavClickDebounced = false; }, 200);
+
+    if (!currentUser || !currentUser.id) {
+      currentUser = null;
+      try { localStorage.removeItem(AUTH_STORAGE_KEY); } catch (_) {}
+      openAuthModal('signin');
+    } else {
+      if (profileDropdown) {
+        profileDropdown.classList.toggle('hidden');
       }
+    }
+  }
+
+  window.handleAuthNavClick = handleAuthNavClick;
+
+  if (authNavBtn) {
+    authNavBtn.addEventListener('click', handleAuthNavClick);
+  }
+
+  // Switch Account Button in Profile Dropdown
+  if (menuSwitchAccountBtn) {
+    menuSwitchAccountBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (profileDropdown) profileDropdown.classList.add('hidden');
+      openAuthModal('signin');
     });
   }
 
@@ -2452,12 +2558,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Logout Click
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
+    logoutBtn.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       currentUser = null;
       localStorage.removeItem(AUTH_STORAGE_KEY);
       updateUserUI();
       if (profileDropdown) profileDropdown.classList.add('hidden');
       showToast('Logged out successfully.');
+      openAuthModal('signin');
     });
   }
 
@@ -2566,10 +2677,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   const GOOGLE_CLIENT_ID = '12540904255-48q81cegoq7rouaht6g070kov1v8jug9.apps.googleusercontent.com';
   let googleTokenClient = null;
+  let googleAuthRetries = 0;
 
   function initRealGoogleAuth() {
     if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
-      setTimeout(initRealGoogleAuth, 400);
+      if (googleAuthRetries < 25) {
+        googleAuthRetries++;
+        setTimeout(initRealGoogleAuth, 400);
+      }
       return;
     }
 
